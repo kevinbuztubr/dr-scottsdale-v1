@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+
+# Block API endpoints from indexing — they're function endpoints, not pages.
+Disallow: /api/
+
+# AI/LLM crawlers — explicitly allowed (AEO play). These bots respect
+# robots.txt for content fetching; allowing them grows Dr. Scottsdale's
+# presence in ChatGPT, Perplexity, Claude, etc. answers.
+User-agent: GPTBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-Web
+Allow: /
+User-agent: anthropic-ai
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://drscottsdaleaz.com/sitemap.xml
+Sitemap: https://dr-scottsdale-v1.vercel.app/sitemap.xml
