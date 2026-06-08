@@ -156,12 +156,59 @@
   // ────────────────────────────────────────────────────────────────────
 
   function wireBookWidget() {
+    // v1.4 — switched from a hand-rolled lead form to an iframe of nr-website's
+    // FloatingContactWidget. One source of truth for the widget across both
+    // properties; any fix on Natural Results flows here automatically.
+    // The iframe sets ?source=drscottsdaleaz.com so submissions stamp the right
+    // GHL contact + opportunity source.
     const fab = document.querySelector('.fab-book');
-    // Build the modal once and reuse
+    const WIDGET_SRC = 'https://naturalresultsaz.com/widget-embed?source=drscottsdaleaz.com';
+
     const modal = document.createElement('div');
-    modal.className = 'lead-modal';
+    modal.className = 'lead-modal lead-modal-iframe';
     modal.id = 'lead-modal';
     modal.innerHTML = `
+      <button class="lead-close" aria-label="Close" style="position:fixed;top:1.25rem;right:1.25rem;z-index:1001;background:rgba(14,0,31,0.9);border:1px solid rgba(212,168,83,0.4);color:var(--gold);width:2.5rem;height:2.5rem;border-radius:50%;font-size:1.25rem;cursor:pointer;">&times;</button>
+      <iframe class="lead-iframe" id="lead-iframe" title="Book a consultation with Dr. Scottsdale" allow="clipboard-write" loading="lazy" style="position:fixed;inset:0;width:100vw;height:100vh;border:0;background:transparent;"></iframe>
+    `;
+    document.body.appendChild(modal);
+
+    const closeBtn = modal.querySelector('.lead-close');
+    const iframe = modal.querySelector('#lead-iframe');
+
+    function openModal() {
+      // Set src on open so analytics fires on actual usage, not page load.
+      if (!iframe.src) iframe.src = WIDGET_SRC;
+      modal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+      const askPanel = document.getElementById('ask-panel');
+      if (askPanel) askPanel.classList.remove('show');
+    }
+    function closeModal() {
+      modal.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    if (fab) fab.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
+    closeBtn.addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('[data-book-cta]');
+      if (!target) return;
+      e.preventDefault();
+      openModal();
+    });
+
+    // Listen for postMessage from the iframe (widget-ready, close, etc.)
+    window.addEventListener('message', (e) => {
+      // Only accept messages from the nr-website origin.
+      if (!/^https:\/\/(naturalresultsaz\.com|nr-website\.vercel\.app)$/.test(e.origin)) return;
+      if (e.data && e.data.type === 'widget-close') closeModal();
+    });
+
+    return; // skip the legacy hand-rolled form code below
+    /* eslint-disable */
+    const _legacyDisabled = `
       <div class="lead-card">
         <button class="lead-close" aria-label="Close">&times;</button>
         <div class="lead-head">
@@ -280,6 +327,8 @@
         submitBtn.innerHTML = 'Request Consultation <svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg>';
       }
     });
+    `; /* end legacy disabled */
+    /* eslint-enable */
   }
 
   // ────────────────────────────────────────────────────────────────────

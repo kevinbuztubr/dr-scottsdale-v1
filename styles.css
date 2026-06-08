@@ -302,6 +302,11 @@ p b { font-weight: 400; }
   display: none; align-items: center; justify-content: center; padding: 1rem;
 }
 .lead-modal.show { display: flex; }
+/* When the modal hosts the nr-website iframe, drop the inner card padding
+   and let the iframe fill the screen. The X close button is positioned
+   fixed in the script so it floats over the iframe. */
+.lead-modal-iframe.lead-modal { padding: 0; background: rgba(14,0,31,0.92); }
+.lead-modal-iframe .lead-iframe { display: block; }
 .lead-card {
   position: relative; width: 100%; max-width: 32rem;
   background: linear-gradient(180deg, var(--deep) 0%, var(--deeper) 100%);
