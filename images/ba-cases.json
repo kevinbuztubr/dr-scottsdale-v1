@@ -1,0 +1,57 @@
+{
+  "_note": "B&A case data pulled from nrps-admin.vercel.app/api/public/gallery-cases on 2026-06-08. URL prefix is https://juaydupdwbvjzzqonykt.supabase.co/storage/v1/object/public/ba-crops/",
+  "_prefix": "https://juaydupdwbvjzzqonykt.supabase.co/storage/v1/object/public/ba-crops/",
+  "scottsdaleSkinny": [
+    ["wp-098076-front-1779226326776-ynxu-before-portrait.jpg", "wp-098076-front-1779226326776-ynxu-after-portrait.jpg", "Scottsdale Skinny"],
+    ["wp-092748-front-1779226323997-u6ma-before-portrait.jpg", "wp-092748-front-1779226323997-u6ma-after-portrait.jpg", "Scottsdale Skinny"],
+    ["wp-6019-front-1779226818733-ezer-before-portrait.jpg", "wp-6019-front-1779226818733-ezer-after-portrait.jpg", "Vaser Lipo 360 (5L Max)"],
+    ["wp-5292-front-1779226743843-ecfy-before-portrait.jpg", "wp-5292-front-1779226743843-ecfy-after-portrait.jpg", "Vaser Lipo 360 (5L Max)"],
+    ["wp-00912-front-1779226741152-ben3-before-portrait.jpg", "wp-00912-front-1779226741152-ben3-after-portrait.jpg", "Vaser Lipo 360 (5L Max)"],
+    ["wp-2563-front-1779226728210-k9ga-before-portrait.jpg", "wp-2563-front-1779226728210-k9ga-after-portrait.jpg", "Vaser Lipo 360 (5L Max)"],
+    ["wp-098426-front-1779226751890-8l2j-before-portrait.jpg", "wp-098426-front-1779226751890-8l2j-after-portrait.jpg", "Front Liposuction (5L) (Same As Lipo360)"],
+    ["wp-65187-front-1779226455811-czpx-before-portrait.jpg", "wp-65187-front-1779226455811-czpx-after-portrait.jpg", "Front Liposuction (5L) (Same As Lipo360)"]
+  ],
+  "gladiator": [
+    ["wp-724311-front-1779226645121-q7my-before-portrait.jpg", "wp-724311-front-1779226645121-q7my-after-portrait.jpg", "Gladiator"],
+    ["wp-34221-front-1779226621944-um0e-before-portrait.jpg", "wp-34221-front-1779226621944-um0e-after-portrait.jpg", "Gladiator"],
+    ["wp-872223-front-1779226619744-8tni-before-portrait.jpg", "wp-872223-front-1779226619744-8tni-after-portrait.jpg", "Gladiator"],
+    ["wp-5011-opt-scaled-1779223902496-nvsz-before-portrait.jpg", "wp-5011-opt-scaled-1779223902496-nvsz-after-portrait.jpg", "One-Stitch Gynecomastia"],
+    ["wp-0021-front-1779226638979-gele-before-portrait.jpg", "wp-0021-front-1779226638979-gele-after-portrait.jpg", "One-Stitch Gynecomastia"],
+    ["wp-5148-front-1779226633061-vunj-before-portrait.jpg", "wp-5148-front-1779226633061-vunj-after-portrait.jpg", "One-Stitch Gynecomastia"],
+    ["wp-0026-front-1779226626416-li8a-before-portrait.jpg", "wp-0026-front-1779226626416-li8a-after-portrait.jpg", "One-Stitch Gynecomastia"]
+  ],
+  "magicShot": [
+    ["wp-009810-front-1779226777741-jj03-before-portrait.jpg", "wp-009810-front-1779226777741-jj03-after-portrait.jpg", "Magic Shot®"],
+    ["wp-871359-front-1779226773464-u5wy-before-portrait.jpg", "wp-871359-front-1779226773464-u5wy-after-portrait.jpg", "Magic Shot®"],
+    ["wp-4331245-front-1779226717073-ma4b-before-portrait.jpg", "wp-4331245-front-1779226717073-ma4b-after-portrait.jpg", "Magic Shot®"],
+    ["wp-723611-front-1779226712706-moot-before-portrait.jpg", "wp-723611-front-1779226712706-moot-after-portrait.jpg", "Magic Shot®"],
+    ["wp-41114-front-1779226303554-saxi-before-square.jpg", "wp-41114-front-1779226303554-saxi-after-square.jpg", "Magic Shot®"],
+    ["wp-41122-front-1779226297694-bkmr-before-portrait.jpg", "wp-41122-front-1779226297694-bkmr-after-portrait.jpg", "Magic Shot®"]
+  ],
+  "gallery": [
+    ["wp-99238-front-1779226730782-1l2k-before-portrait.jpg", "wp-99238-front-1779226730782-1l2k-after-portrait.jpg", "Mommy Makeover"],
+    ["wp-8447472-front-1779226356062-bela-before-portrait.jpg", "wp-8447472-front-1779226356062-bela-after-portrait.jpg", "Mommy Makeover"],
+    ["wp-4425-front-1779226865430-iv91-before-portrait.jpg", "wp-4425-front-1779226865430-iv91-after-portrait.jpg", "Tummy Tuck"],
+    ["wp-0002-front-1779226812346-350v-before-portrait.jpg", "wp-0002-front-1779226812346-350v-after-portrait.jpg", "Tummy Tuck"],
+    ["wp-14682-front-1779301108764-08yu-before-portrait.jpg", "wp-14682-front-1779301108764-08yu-after-portrait.jpg", "Breast Augmentation"],
+    ["wp-5517-side-scaled-1779224416928-7css-before-portrait.jpg", "wp-5517-side-scaled-1779224416928-7css-after-portrait.jpg", "Breast Augmentation"],
+    ["wp-098076-front-1779226326776-ynxu-before-portrait.jpg", "wp-098076-front-1779226326776-ynxu-after-portrait.jpg", "Scottsdale Skinny"],
+    ["wp-092748-front-1779226323997-u6ma-before-portrait.jpg", "wp-092748-front-1779226323997-u6ma-after-portrait.jpg", "Scottsdale Skinny"],
+    ["wp-724311-front-1779226645121-q7my-before-portrait.jpg", "wp-724311-front-1779226645121-q7my-after-portrait.jpg", "Gladiator"],
+    ["wp-34221-front-1779226621944-um0e-before-portrait.jpg", "wp-34221-front-1779226621944-um0e-after-portrait.jpg", "Gladiator"],
+    ["wp-009810-front-1779226777741-jj03-before-portrait.jpg", "wp-009810-front-1779226777741-jj03-after-portrait.jpg", "Magic Shot®"],
+    ["wp-871359-front-1779226773464-u5wy-before-portrait.jpg", "wp-871359-front-1779226773464-u5wy-after-portrait.jpg", "Magic Shot®"],
+    ["wp-5011-opt-scaled-1779223902496-nvsz-before-portrait.jpg", "wp-5011-opt-scaled-1779223902496-nvsz-after-portrait.jpg", "Gynecomastia"],
+    ["wp-0021-front-1779226638979-gele-before-portrait.jpg", "wp-0021-front-1779226638979-gele-after-portrait.jpg", "Gynecomastia"],
+    ["wp-6019-front-1779226818733-ezer-before-portrait.jpg", "wp-6019-front-1779226818733-ezer-after-portrait.jpg", "Vaser Lipo 360"],
+    ["wp-5292-front-1779226743843-ecfy-before-portrait.jpg", "wp-5292-front-1779226743843-ecfy-after-portrait.jpg", "Vaser Lipo 360"],
+    ["wp-5756-front-1779226687623-bo9a-before-portrait.jpg", "wp-5756-front-1779226687623-bo9a-after-portrait.jpg", "Rhinoplasty"],
+    ["wp-17406-front-1779224774604-o8jv-before-portrait.jpg", "wp-17406-front-1779224774604-o8jv-after-portrait.jpg", "Rhinoplasty"],
+    ["wp-17624-front-1779223976788-8r3r-before-landscape.jpg", "wp-17624-front-1779223976788-8r3r-after-landscape.jpg", "Eyelid Surgery"],
+    ["wp-17660-front-1779223988525-2iws-before-landscape.jpg", "wp-17660-front-1779223988525-2iws-after-landscape.jpg", "Eyelid Surgery"],
+    ["wp-5890-front-1779226681865-fz8s-before-portrait.jpg", "wp-5890-front-1779226681865-fz8s-after-portrait.jpg", "Facelift"],
+    ["wp-5582-front-1779226647874-wr7z-before-portrait.jpg", "wp-5582-front-1779226647874-wr7z-after-portrait.jpg", "Facelift"],
+    ["wp-7325-front-1779301095624-3ulw-before-portrait.jpg", "wp-7325-front-1779301095624-3ulw-after-portrait.jpg", "Arm Lift"],
+    ["wp-0011221-front-1779301090379-qg34-before-portrait.jpg", "wp-0011221-front-1779301090379-qg34-after-portrait.jpg", "Arm Lift"]
+  ]
+}
