@@ -138,9 +138,10 @@ section.page-hero .ctas { margin-top: 2.5rem; display: flex; gap: 1rem; flex-wra
 .proc-side .fact-card .row .v { color: var(--pearl); font-weight: 500; text-align: right; }
 .proc-body h3 { font-family: 'Bebas Neue', sans-serif; text-transform: uppercase; color: var(--pearl); letter-spacing: 0.005em; font-size: 1.5rem; margin: 2.5rem 0 1rem; }
 .proc-body h3:first-child { margin-top: 0; }
-.proc-body p { color: rgba(245,240,230,0.8); font-size: 1.0625rem; line-height: 1.7; margin-bottom: 1rem; }
-.proc-body p strong { color: var(--gold); font-weight: 500; }
-.proc-body ul { list-style: none; padding: 0; margin: 1rem 0; }
+.proc-body p { color: rgba(245,240,230,0.82); font-size: 1.0625rem; line-height: 1.75; margin-bottom: 1.15rem; font-weight: 300; }
+/* Subtle italic accent — no aggressive bold. Reads as a phrase elevation, not a tag-link. */
+.proc-body p strong, .proc-body li strong { color: var(--gold-light); font-weight: 400; font-style: italic; letter-spacing: 0.005em; }
+.proc-body ul { list-style: none; padding: 0; margin: 1.25rem 0; }
 .proc-body ul li { padding: 0.75rem 0 0.75rem 1.5rem; border-bottom: 1px solid rgba(212,168,83,0.1); position: relative; font-size: 0.9375rem; color: rgba(245,240,230,0.85); line-height: 1.55; }
 .proc-body ul li::before { content: '✦'; position: absolute; left: 0; color: var(--gold); font-size: 0.875rem; top: 0.875rem; }
 
@@ -149,6 +150,97 @@ section.page-hero .ctas { margin-top: 2.5rem; display: flex; gap: 1rem; flex-wra
 .gal-filter button { background: rgba(212,168,83,0.05); border: 1px solid rgba(212,168,83,0.2); border-radius: var(--r-pill); padding: 0.625rem 1.25rem; color: rgba(245,240,230,0.8); font-family: 'Inter', sans-serif; font-weight: 500; font-size: 0.8125rem; cursor: pointer; transition: all 0.3s ease; }
 .gal-filter button:hover { border-color: var(--gold); color: var(--gold); }
 .gal-filter button.active { background: linear-gradient(135deg, #E8C97A 0%, #D4A853 50%, #B8933E 100%); color: var(--deeper); border-color: transparent; }
+
+/* Global typography refinement — kill aggressive bold sitewide.
+   Bold body copy reads tacky in luxury context. Replace with subtle italic + gold tint. */
+p strong, li strong { color: var(--gold-light); font-weight: 400; font-style: italic; letter-spacing: 0.005em; }
+p b { font-weight: 400; }
+
+/* 18+ B&A age-gate modal — required compliance for surgical results imagery */
+.age-gate {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(14,0,31,0.92); backdrop-filter: blur(12px);
+  display: none; align-items: center; justify-content: center; padding: 1.5rem;
+}
+.age-gate.show { display: flex; }
+.age-gate .card {
+  max-width: 32rem; width: 100%;
+  background: linear-gradient(180deg, var(--deep) 0%, var(--deeper) 100%);
+  border: 1px solid rgba(212,168,83,0.35); border-radius: var(--r-lg);
+  padding: 2.5rem 2rem; text-align: center;
+  box-shadow: 0 50px 100px -30px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,168,83,0.12);
+}
+.age-gate .card .row { display: inline-flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
+.age-gate .card h3 {
+  font-family: 'Bebas Neue', sans-serif; text-transform: uppercase;
+  color: var(--pearl); font-size: 1.75rem; line-height: 1.1; margin-bottom: 1rem;
+  letter-spacing: 0.005em;
+}
+.age-gate .card p { color: rgba(245,240,230,0.78); font-size: 0.9375rem; line-height: 1.65; margin-bottom: 1.5rem; }
+.age-gate .card .actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+.age-gate .card .note { margin-top: 1.25rem; font-size: 0.75rem; color: rgba(245,240,230,0.5); }
+
+/* Persistent B&A consent badge */
+.consent-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.4rem 0.875rem; margin: 0 auto 1.75rem;
+  background: rgba(212,168,83,0.06);
+  border: 1px solid rgba(212,168,83,0.22);
+  border-radius: var(--r-pill);
+  font-family: 'Inter', sans-serif; font-weight: 400;
+  font-size: 0.75rem; color: rgba(245,240,230,0.75);
+  letter-spacing: 0.02em;
+}
+.consent-badge .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); }
+
+/* Ask Dr. Scottsdale slide-out chat panel */
+.ask-panel {
+  position: fixed; bottom: 5.5rem; left: 1.5rem; z-index: 45;
+  width: 22rem; max-width: calc(100vw - 3rem);
+  background: linear-gradient(180deg, var(--deep) 0%, var(--deeper) 100%);
+  border: 1px solid rgba(212,168,83,0.3); border-radius: var(--r-lg);
+  box-shadow: 0 30px 70px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,168,83,0.12);
+  opacity: 0; transform: translateY(12px) scale(0.96); pointer-events: none;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+.ask-panel.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+.ask-panel .head {
+  padding: 1.125rem 1.25rem; border-bottom: 1px solid rgba(212,168,83,0.15);
+  display: flex; align-items: center; gap: 0.875rem;
+  background: radial-gradient(ellipse at 30% 0%, rgba(139,0,212,0.25) 0%, transparent 70%);
+}
+.ask-panel .head .who { flex: 1; }
+.ask-panel .head .who .name { font-family: 'Italianno', cursive; color: var(--gold); font-size: 1.75rem; line-height: 1; }
+.ask-panel .head .who .tag { font-family: 'Bebas Neue', sans-serif; font-size: 9px; letter-spacing: 0.32em; color: rgba(245,240,230,0.6); text-transform: uppercase; margin-top: 0.125rem; }
+.ask-panel .head .close { background: transparent; border: 0; color: rgba(245,240,230,0.6); cursor: pointer; font-size: 1.25rem; line-height: 1; padding: 0.25rem; transition: color 0.3s ease; }
+.ask-panel .head .close:hover { color: var(--gold); }
+.ask-panel .body { padding: 1.25rem; color: rgba(245,240,230,0.82); font-size: 0.875rem; line-height: 1.6; }
+.ask-panel .body .intro { color: rgba(245,240,230,0.7); margin-bottom: 1rem; }
+.ask-panel .body .chip-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem; }
+.ask-panel .body .chip {
+  padding: 0.4rem 0.75rem; background: rgba(212,168,83,0.06);
+  border: 1px solid rgba(212,168,83,0.18); border-radius: var(--r-pill);
+  font-size: 0.75rem; color: rgba(245,240,230,0.85); cursor: pointer;
+  transition: all 0.3s ease;
+}
+.ask-panel .body .chip:hover { border-color: var(--gold); color: var(--gold); }
+.ask-panel .body .cta-row {
+  display: flex; flex-direction: column; gap: 0.625rem;
+  padding-top: 1rem; border-top: 1px solid rgba(212,168,83,0.12);
+}
+.ask-panel .body .cta-row a { display: inline-block; text-align: center; }
+.ask-panel .body .cta-row .gold-cta {
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(135deg, #E8C97A 0%, #D4A853 50%, #B8933E 100%);
+  color: var(--deeper); font-weight: 500; font-size: 0.8125rem;
+  letter-spacing: 0.02em; border-radius: var(--r-pill);
+}
+.ask-panel .body .cta-row .ghost-cta {
+  padding: 0.75rem 1.25rem; border: 1px solid rgba(212,168,83,0.3);
+  color: rgba(245,240,230,0.85); font-weight: 500; font-size: 0.8125rem;
+  letter-spacing: 0.02em; border-radius: var(--r-pill);
+}
 
 @media (max-width: 900px) {
   nav.top .links { display: none; }

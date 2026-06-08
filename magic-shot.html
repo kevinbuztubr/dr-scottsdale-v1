@@ -152,6 +152,7 @@
         All patients consented to share results.
       </p>
     </div>
+    <div style="text-align: center;"><span class="consent-badge"><span class="dot"></span>Real patient &middot; informed consent &middot; 18+ only</span></div>
     <div class="ba-grid" id="proc-ba-grid"></div>
     <div style="text-align: center; margin-top: 3rem;">
       <a href="results.html" class="btn-ghost">See Full Gallery
@@ -174,7 +175,7 @@
       virtually ($300), in-person ($500), or via a free PCC orientation call.
     </p>
     <div style="margin-top: 2.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-      <a href="#" class="btn-gold">Book a Consultation
+      <a href="#book" class="btn-gold" data-book-cta>Book a Consultation
         <svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg>
       </a>
       <a href="tel:+14809148300" class="btn-ghost">Call (480) 914-8300</a>
@@ -211,8 +212,24 @@
   </div>
 </footer>
 
-<button class="fab-ask"><span class="avatar-s">S</span><span class="label">Ask Dr. Scottsdale</span></button>
-<button class="fab-book"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 6h12M6 1v4M10 1v4" stroke="currentColor" stroke-width="1.5"/></svg>Book Consult</button>
+<button class="fab-ask" aria-label="Open Ask Dr. Scottsdale"><span class="avatar-s">S</span><span class="label">Ask Dr. Scottsdale</span></button>
+<button class="fab-book" aria-label="Book a consultation"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 6h12M6 1v4M10 1v4" stroke="currentColor" stroke-width="1.5"/></svg>Book Consult</button>
+
+<!-- 18+ B&A age-gate — pages with surgical results imagery require age confirmation -->
+<div class="age-gate" role="dialog" aria-modal="true" aria-labelledby="ag-title">
+  <div class="card">
+    <div class="row"><span class="gold-bar"></span><span class="eyebrow">Patient Results Disclosure</span><span class="gold-bar"></span></div>
+    <h3 id="ag-title">Surgical Results &middot; 18+ Only</h3>
+    <p>This page contains real before-and-after photographs from surgical patients of Dr. Carlos Mata. All patients provided written, informed consent to share their results. By continuing, you confirm you are 18 years or older and understand this is medical imagery presented for educational purposes.</p>
+    <div class="actions">
+      <button class="btn-gold" data-action="confirm" type="button">I am 18+ &middot; Continue</button>
+      <button class="btn-ghost" data-action="exit" type="button">Exit</button>
+    </div>
+    <div class="note">Results vary. Individual outcomes depend on anatomy, healing, and adherence to post-op instructions. No outcome is guaranteed.</div>
+  </div>
+</div>
+
+<script src="scripts.js" defer></script>
 
 <script>
 fetch('images/ba-cases.json').then(r => r.json()).then(data => {
