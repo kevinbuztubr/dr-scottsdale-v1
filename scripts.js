@@ -50,10 +50,20 @@
 
     const close = panel.querySelector('.close');
     fab.addEventListener('click', (e) => {
+      // stopPropagation prevents the document-level outside-click handler from
+      // immediately closing the panel on the same click. Without this, the click
+      // bubbles to document, the handler sees the just-opened panel, and even
+      // though fab.contains(target) should return true, some browsers fire the
+      // document handler in capture order with target retargeting making the
+      // contains() check unreliable. stopPropagation is the bulletproof fix.
       e.preventDefault();
+      e.stopPropagation();
       panel.classList.toggle('show');
     });
-    close.addEventListener('click', () => panel.classList.remove('show'));
+    close.addEventListener('click', (e) => {
+      e.stopPropagation();
+      panel.classList.remove('show');
+    });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') panel.classList.remove('show');
     });
