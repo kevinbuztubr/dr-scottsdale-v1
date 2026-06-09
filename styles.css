@@ -692,8 +692,11 @@ section.ask .chat .body .iq-bubble.iq-thinking {
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0s linear 0.3s;
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* was center — locked scroll when content was taller than viewport */
   justify-content: center;
+  overflow-y: auto;        /* allow drawer to scroll when Signatures expands */
+  -webkit-overflow-scrolling: touch;
+  padding: 4.5rem 0 2rem;  /* leave room above content so close button doesn't overlap viewport edge */
 }
 .nav-drawer.show {
   opacity: 1;
