@@ -32,10 +32,11 @@
   const PHONE = "+14808524999";
   const PHONE_DISPLAY = "(480) 852-4999";
 
-  // Live catalog endpoint on nr-website (CORS-allowed for dr-scottsdale-v1).
-  // Returns the same Service[] the NRPS widget consumes — we filter to
-  // provider==='dr-mata' client-side.
-  const CATALOG_URL = "https://naturalresultsaz.com/api/widget-services";
+  // Same-origin catalog endpoint — /api/catalog.js proxies to
+  // naturalresultsaz.com/api/widget-services server-side and filters to
+  // provider==='dr-mata' before responding. Browser never sees a cross-origin
+  // request, so no CORS / preflight failure modes.
+  const CATALOG_URL = "/api/catalog";
 
   // ────────────────────────────────────────────────────────────────────
   // Catalog helpers (mirrors lib/quote/services.ts on nr-website)
@@ -70,7 +71,8 @@
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
       .then((all) => {
         if (!Array.isArray(all)) throw new Error("Bad catalog shape");
-        // Dr. Scottsdale brand site is the surgical practice → dr-mata only.
+        // /api/catalog already filters to provider="dr-mata" server-side,
+        // but defensive re-filter in case the upstream shape ever changes.
         CATALOG = all.filter((s) => s && s.provider === "dr-mata");
         CATALOG_LOADED = true;
         return CATALOG;
