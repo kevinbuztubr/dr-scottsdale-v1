@@ -3,35 +3,48 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Media & Press — Dr. Scottsdale® | Featured in Men's Health, USA Today, Yahoo, LA Weekly, Newsweek</title>
-<meta name="description" content="Dr. Scottsdale® (Dr. Carlos Mata) in the press — Men's Health, USA Today, Yahoo, LA Weekly, Voyage Phoenix, Top Doctors. Newsweek's America's Best Plastic Surgeons. Castle Connolly Top Doctor since 2018. Media appearances, brand recognition, and press coverage." />
+<title>In The Media — Dr. Scottsdale® | ABC15, FOX10, Men's Health, USA Today, Yahoo, LA Weekly, Flaunt</title>
+<meta name="description" content="Dr. Scottsdale® (Dr. Carlos Mata) in the media. TV appearances on ABC15 Sonoran Living and FOX10 Phoenix. Press features in Men's Health, USA Today, Yahoo, LA Weekly, Flaunt, Voyage Phoenix, Vents, Disrupt, and more." />
 <link rel="canonical" href="https://drscottsdaleaz.com/media" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Media & Press — Dr. Scottsdale®" />
-<meta property="og:description" content="Dr. Scottsdale® press features, awards, and media appearances. Newsweek's America's Best Plastic Surgeons. Featured in Men's Health, USA Today, LA Weekly, and more." />
+<meta property="og:title" content="In The Media — Dr. Scottsdale®" />
+<meta property="og:description" content="Dr. Scottsdale® press features and TV appearances. ABC15, FOX10, Men's Health, USA Today, Yahoo, LA Weekly, Flaunt, Voyage Phoenix, and more." />
 <meta property="og:url" content="https://drscottsdaleaz.com/media" />
 <meta property="og:image" content="https://drscottsdaleaz.com/images/dr-mata.jpg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Italianno&display=swap" />
-<link rel="stylesheet" href="styles.css?v=15" />
+<link rel="stylesheet" href="styles.css?v=16" />
 <style>
-  /* Media-page specific layout — press grid + awards strip + video well */
-  .media-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  /* Media-page specific layout — TV grid + press grid + awards strip.
+     Outlet name is rendered as a typographic label (Bebas Neue) rather than
+     a logo image — keeps the page shippable today without staging dozens of
+     third-party logo files, and the aesthetic stays in lock-step with the
+     rest of the site. When we get clean logos we can swap in <img> later. */
+  .media-section-head { text-align: center; max-width: 36rem; margin: 0 auto 2.5rem; }
+  .media-section-head .row { display: inline-flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+  .media-section-head h2 { font-family: 'Bebas Neue', sans-serif; text-transform: uppercase; color: var(--pearl); font-size: 2rem; line-height: 1.05; letter-spacing: 0.005em; }
+  .media-section-head h2 em { font-family: 'Italianno', cursive; color: var(--gold); font-style: normal; font-weight: 400; font-size: 1.4em; letter-spacing: 0; text-transform: none; line-height: 0; padding-right: 0.25em; }
+
+  .media-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; }
   @media (max-width: 900px) { .media-grid { grid-template-columns: 1fr; } }
   .media-card {
-    position: relative; padding: 2rem 1.75rem 1.75rem;
+    position: relative; padding: 1.75rem 1.5rem 1.5rem; display: flex; flex-direction: column;
     background: linear-gradient(180deg, var(--deep) 0%, var(--deeper) 100%);
     border: 1px solid rgba(212,168,83,0.18); border-radius: var(--r-lg);
-    transition: all 0.4s ease;
+    transition: all 0.4s ease; text-decoration: none;
   }
   .media-card:hover { border-color: rgba(212,168,83,0.4); transform: translateY(-2px); box-shadow: 0 30px 70px -30px rgba(139,0,212,0.4); }
-  .media-card .outlet { display: flex; align-items: center; justify-content: center; height: 3rem; margin-bottom: 1.5rem; }
-  .media-card .outlet img { max-height: 2.25rem; max-width: 10rem; width: auto; filter: brightness(0) invert(1) opacity(0.85); }
-  .media-card h3 { font-family: 'Bebas Neue', sans-serif; text-transform: uppercase; color: var(--pearl); font-size: 1.25rem; line-height: 1.2; margin-bottom: 0.75rem; letter-spacing: 0.005em; }
-  .media-card p { color: rgba(245,240,230,0.75); font-size: 0.875rem; line-height: 1.6; font-weight: 300; }
-  .media-card .read-on { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid rgba(212,168,83,0.15); color: var(--gold); font-family: 'Inter', sans-serif; font-weight: 500; font-size: 0.8125rem; }
+  .media-card .outlet { display: flex; align-items: center; gap: 0.625rem; margin-bottom: 1rem; }
+  .media-card .outlet .dot { width: 0.4rem; height: 0.4rem; border-radius: 50%; background: var(--gold); }
+  .media-card .outlet .name { font-family: 'Bebas Neue', sans-serif; text-transform: uppercase; color: var(--gold); letter-spacing: 0.32em; font-size: 11px; }
+  .media-card h3 { font-family: 'Bebas Neue', sans-serif; text-transform: uppercase; color: var(--pearl); font-size: 1.125rem; line-height: 1.25; margin-bottom: 0.5rem; letter-spacing: 0.005em; }
+  .media-card p { color: rgba(245,240,230,0.75); font-size: 0.875rem; line-height: 1.6; font-weight: 300; flex: 1; }
+  .media-card .read-on { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(212,168,83,0.15); color: var(--gold); font-family: 'Inter', sans-serif; font-weight: 500; font-size: 0.8125rem; }
   .media-card .read-on:hover { color: var(--gold-light); }
+  .media-card.tv .outlet .name { color: var(--accent); }
+  .media-card.tv .outlet .dot { background: var(--accent); }
+
   .awards-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 4rem; padding-top: 4rem; border-top: 1px solid rgba(212,168,83,0.18); }
   @media (max-width: 900px) { .awards-strip { grid-template-columns: 1fr; } }
   .award-tile {
@@ -39,11 +52,55 @@
     background: rgba(212,168,83,0.04); border: 1px solid rgba(212,168,83,0.18);
     border-radius: var(--r-lg);
   }
-  .award-tile img { height: 4rem; width: auto; margin: 0 auto 1.25rem; display: block; }
   .award-tile h4 { font-family: 'Bebas Neue', sans-serif; color: var(--gold); text-transform: uppercase; letter-spacing: 0.32em; font-size: 11px; margin-bottom: 0.75rem; }
   .award-tile p { color: var(--pearl); font-size: 0.875rem; line-height: 1.6; }
   .award-tile .since { display: inline-block; margin-top: 0.875rem; padding: 0.25rem 0.75rem; background: rgba(212,168,83,0.1); border: 1px solid rgba(212,168,83,0.3); border-radius: var(--r-pill); font-family: 'Bebas Neue', sans-serif; color: var(--gold); font-size: 0.6875rem; letter-spacing: 0.32em; }
+
+  /* Spacing between the two media sections */
+  .media-divider { height: 1px; background: rgba(212,168,83,0.18); margin: 5rem 0 4rem; }
 </style>
+<!-- JSON-LD: NewsArticle list as itemList for AEO crawlers. Each press feature
+     is exposed as a CreativeWork so LLMs can answer "where has Dr. Scottsdale
+     been featured" with structured data. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://drscottsdaleaz.com/media#webpage",
+  "url": "https://drscottsdaleaz.com/media",
+  "name": "In The Media — Dr. Scottsdale®",
+  "about": {
+    "@type": "Physician",
+    "@id": "https://drscottsdaleaz.com/#physician",
+    "name": "Dr. Carlos Mata",
+    "alternateName": "Dr. Scottsdale®",
+    "medicalSpecialty": "Plastic Surgery"
+  },
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "url": "https://www.abc15.com/lifestyle/sonoran-living/sl-sponsors/natural-results-offering-life-changing-new-trusculpt-3d", "name": "ABC15 Sonoran Living — TruSculpt 3D Coverage" },
+      { "@type": "ListItem", "position": 2, "url": "https://www.abc15.com/lifestyle/sonoran-living/dr-carlos-mata-aka-dr-scottsdale-specializes-in-natural-results", "name": "ABC15 Sonoran Living — Dr. Carlos Mata Specializes in Natural Results" },
+      { "@type": "ListItem", "position": 3, "url": "https://www.fox10phoenix.com/news/valley-doctor-using-cutting-edge-technology-to-melt-fat-tighten-skin", "name": "FOX10 Phoenix — Valley Doctor Using Cutting-Edge Technology" },
+      { "@type": "ListItem", "position": 4, "url": "https://www.abc15.com/lifestyle/sonoran-living/sl-sponsors/dr-carlos-mata-of-natural-results-caters-his-practice-to-the-hispanic-community", "name": "ABC15 Sonoran Living — Caters Practice to the Hispanic Community" },
+      { "@type": "ListItem", "position": 5, "url": "https://www.fox10phoenix.com/news/video-shows-procedure-done-to-take-product-out-of-people-with-bad-lip-injections", "name": "FOX10 Phoenix — Procedure for Bad Lip Injections" },
+      { "@type": "ListItem", "position": 6, "url": "https://www.menshealth.com/fitness/a37960715/abs-pecs-gladiator-cosmetic-surgery-liposuction/", "name": "Men's Health — 20 Questions With a Man Who Had Gladiator Surgery" },
+      { "@type": "ListItem", "position": 7, "url": "https://flaunt.com/content/doctor-scottsdale", "name": "Flaunt Magazine — Dr. Scottsdale Feature" },
+      { "@type": "ListItem", "position": 8, "url": "https://www.laweekly.com/dr-scottsdale-shares-his-insights-on-the-latest-trends-in-plastic-surgery/", "name": "LA Weekly — Latest Trends in Plastic Surgery" },
+      { "@type": "ListItem", "position": 9, "url": "http://voyagephoenix.com/interview/meet-dr-scottsdale-natural-results-plastic-surgery-carlos-mata-md-scottsdale/", "name": "Voyage Phoenix — Meet Dr. Scottsdale" },
+      { "@type": "ListItem", "position": 10, "url": "https://ventsmagazine.com/2020/06/17/dr-scottsdale-talks-about-high-definition-liposuction/", "name": "Vents Magazine — High-Definition Liposuction" },
+      { "@type": "ListItem", "position": 11, "url": "https://www.americadailypost.com/i-help-people-look-beautiful-on-their-own-terms-says-plastic-surgeon-dr-scottsdale/", "name": "America Daily Post — Beautiful On Their Own Terms" },
+      { "@type": "ListItem", "position": 12, "url": "https://news.yahoo.com/difference-between-botox-fillers-explained-115434569.html", "name": "Yahoo News — Botox vs. Fillers Explained" },
+      { "@type": "ListItem", "position": 13, "url": "https://www.laprogressive.com/scottsdale/", "name": "LA Progressive — Dr. Scottsdale Profile" },
+      { "@type": "ListItem", "position": 14, "url": "https://www.usatoday.com/story/sponsor-story/imperium-group/2022/05/24/keep-eye-out-these-companies-and-entrepreneurs-rise-2022/9763279002/", "name": "USA Today — Entrepreneurs On The Rise" },
+      { "@type": "ListItem", "position": 15, "url": "https://timebusinessnews.com/dr-scottsdale-recommends-minimally-invasive-procedures-as-an-alternative-to-full-blown-surgeries/", "name": "Time Business News — Minimally Invasive Procedures" },
+      { "@type": "ListItem", "position": 16, "url": "https://www.in2town.co.uk/health-and-lifestyle/interview-with-plastic-surgeon-dr-scottsdale/", "name": "In2Town — Interview with Dr. Scottsdale" },
+      { "@type": "ListItem", "position": 17, "url": "https://www.theamericanreporter.com/dr-scottsdale-military-training-helped-me-become-a-focused-and-detail-oriented-plastic-surgeon/", "name": "The American Reporter — Military Training" },
+      { "@type": "ListItem", "position": 18, "url": "https://disruptmagazine.com/dr-scottsdale-shares-insights-about-5-leading-trends-in-plastic-surgery-in-2020", "name": "Disrupt Magazine — 5 Leading Trends in Plastic Surgery" }
+    ]
+  }
+}
+</script>
 </head>
 <body>
 <nav class="top">
@@ -61,82 +118,187 @@
 
 <section class="page-hero">
   <div class="container">
-    <div class="row"><span class="gold-bar"></span><span class="eyebrow">As Featured In</span></div>
-    <h1>Press, Awards &amp; Media</h1>
+    <div class="row"><span class="gold-bar"></span><span class="eyebrow">In The Media</span></div>
+    <h1>Press &amp; TV Appearances</h1>
     <p class="sub">— Dr. Scottsdale&reg; in the national spotlight</p>
     <p class="lead">
-      Recognition from the press and the profession — independently verified, never paid placement.
-      Featured in Newsweek's America's Best Plastic Surgeons, Castle Connolly Top Doctor since 2018,
-      Men's Health, USA Today, Yahoo, LA Weekly, and Voyage Phoenix.
+      Board-certified plastic surgeon Dr. Carlos Mata shares his techniques, knowledge, and
+      expertise across TV and press — from ABC15 Sonoran Living and FOX10 Phoenix to
+      Men's Health, USA Today, Yahoo News, LA Weekly, Flaunt, Voyage Phoenix, and more.
     </p>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <div style="text-align:center;max-width:36rem;margin:0 auto 1rem;">
-      <div style="display:inline-flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
-        <span class="gold-bar"></span><span class="eyebrow">Press Features</span><span class="gold-bar"></span>
-      </div>
-      <h2>Recent Coverage</h2>
+
+    <!-- ─────────────────────────────────────────────────────────────────
+         On TV — 5 segments (ABC15 Sonoran Living × 3, FOX10 Phoenix × 2)
+         ───────────────────────────────────────────────────────────────── -->
+    <div class="media-section-head">
+      <div class="row"><span class="gold-bar"></span><span class="eyebrow">On TV</span><span class="gold-bar"></span></div>
+      <h2>Dr. Scottsdale&reg; <em>on</em> Television</h2>
     </div>
+
     <div class="media-grid">
-      <a href="https://www.menshealth.com" target="_blank" rel="noopener" class="media-card">
-        <div class="outlet"><img src="images/press-mens-health.png" alt="Men's Health"/></div>
-        <h3>The Male Plastic Surgery Boom</h3>
-        <p>Coverage of the rise of male aesthetic surgery and Dr. Scottsdale's role in pioneering male-specific procedures like the Gladiator&reg; makeover and Magic Shot&reg; enhancement.</p>
-        <span class="read-on">Read on Men's Health<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+      <a href="https://www.abc15.com/lifestyle/sonoran-living/dr-carlos-mata-aka-dr-scottsdale-specializes-in-natural-results" target="_blank" rel="noopener" class="media-card tv">
+        <div class="outlet"><span class="dot"></span><span class="name">ABC15 Sonoran Living</span></div>
+        <h3>Dr. Carlos Mata, aka Dr. Scottsdale, Specializes in Natural Results</h3>
+        <p>Sonoran Living segment introducing Dr. Mata and his approach — board-certified plastic surgery with the eye of an artist and the precision of a Harvard-trained surgeon.</p>
+        <span class="read-on">Watch on ABC15<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
       </a>
-      <a href="https://www.usatoday.com" target="_blank" rel="noopener" class="media-card">
-        <div class="outlet"><img src="images/press-usatoday.png" alt="USA Today"/></div>
-        <h3>Scottsdale Skinny&reg; Goes National</h3>
-        <p>How Dr. Scottsdale's signature single-session body contouring procedure is reshaping the way patients think about staging vs. comprehensive transformation.</p>
-        <span class="read-on">Read on USA Today<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+
+      <a href="https://www.fox10phoenix.com/news/valley-doctor-using-cutting-edge-technology-to-melt-fat-tighten-skin" target="_blank" rel="noopener" class="media-card tv">
+        <div class="outlet"><span class="dot"></span><span class="name">FOX10 Phoenix</span></div>
+        <h3>Valley Doctor Uses Cutting-Edge Tech to Melt Fat &amp; Tighten Skin</h3>
+        <p>FOX10 covers the non-surgical body-contouring technology Dr. Scottsdale® brought to the Valley — what it does, who it's for, and how it changed the conversation around lipo.</p>
+        <span class="read-on">Watch on FOX10<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
       </a>
-      <a href="https://www.yahoo.com" target="_blank" rel="noopener" class="media-card">
-        <div class="outlet"><img src="images/press-yahoo.png" alt="Yahoo"/></div>
-        <h3>Inside Dr. Scottsdale's Practice</h3>
-        <p>A look behind the scenes at one of the most followed plastic surgeons on social media — 25,000+ procedures, 1M+ social followers, and a male-focused practice.</p>
-        <span class="read-on">Read on Yahoo<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+
+      <a href="https://www.abc15.com/lifestyle/sonoran-living/sl-sponsors/dr-carlos-mata-of-natural-results-caters-his-practice-to-the-hispanic-community" target="_blank" rel="noopener" class="media-card tv">
+        <div class="outlet"><span class="dot"></span><span class="name">ABC15 Sonoran Living</span></div>
+        <h3>Catering the Practice to the Hispanic Community</h3>
+        <p>Bilingual care, cultural fluency, and the patient-first approach Dr. Mata built into Natural Results. ABC15 talks with him about serving Arizona's Hispanic community.</p>
+        <span class="read-on">Watch on ABC15<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
       </a>
-      <a href="https://www.laweekly.com" target="_blank" rel="noopener" class="media-card">
-        <div class="outlet"><img src="images/press-laweekly.png" alt="LA Weekly"/></div>
-        <h3>The Voice of Scottsdale Aesthetics</h3>
-        <p>LA Weekly profile on Dr. Scottsdale's brand — combining surgical precision with the visual storytelling that built one of the largest followings in plastic surgery.</p>
-        <span class="read-on">Read on LA Weekly<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+
+      <a href="https://www.fox10phoenix.com/news/video-shows-procedure-done-to-take-product-out-of-people-with-bad-lip-injections" target="_blank" rel="noopener" class="media-card tv">
+        <div class="outlet"><span class="dot"></span><span class="name">FOX10 Phoenix</span></div>
+        <h3>Fixing Bad Lip Injections — Dissolving &amp; Reversing</h3>
+        <p>FOX10 documents Dr. Scottsdale® performing a corrective procedure to dissolve poorly-placed lip filler. A real-time look at what fixable looks like.</p>
+        <span class="read-on">Watch on FOX10<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
       </a>
-      <a href="https://voyagephoenix.com" target="_blank" rel="noopener" class="media-card">
-        <div class="outlet"><img src="images/press-voyage.png" alt="Voyage Phoenix"/></div>
-        <h3>Scottsdale's Signature Surgeon</h3>
-        <p>Local recognition for the Phoenix-Scottsdale aesthetic landscape — Dr. Scottsdale's home base, hospital privileges, and patients-fly-in-for reputation.</p>
-        <span class="read-on">Read on Voyage Phoenix<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
-      </a>
-      <a href="https://rankings.newsweek.com/americas-best-plastic-surgeons-2023/liposuction" target="_blank" rel="noopener" class="media-card">
-        <div class="outlet"><img src="images/press-topdocs.png" alt="Newsweek Top Doctors"/></div>
-        <h3>Newsweek's America's Best Plastic Surgeons</h3>
-        <p>Named by Newsweek for Facelift, Breast Augmentation, and Liposuction — based on 8,400+ peer votes from 2,000+ medical experts nationwide. Cannot be bought.</p>
-        <span class="read-on">View Newsweek Ranking<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+
+      <a href="https://www.abc15.com/lifestyle/sonoran-living/sl-sponsors/natural-results-offering-life-changing-new-trusculpt-3d" target="_blank" rel="noopener" class="media-card tv">
+        <div class="outlet"><span class="dot"></span><span class="name">ABC15 Sonoran Living</span></div>
+        <h3>Life-Changing TruSculpt 3D at Natural Results</h3>
+        <p>ABC15 spotlights Dr. Scottsdale® introducing TruSculpt 3D — the non-surgical body-contouring tech and how it fits into the Natural Results approach.</p>
+        <span class="read-on">Watch on ABC15<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
       </a>
     </div>
 
+    <div class="media-divider"></div>
+
+    <!-- ─────────────────────────────────────────────────────────────────
+         In The Press — 13 features, sourced from the original
+         drscottsdaleaz.com/in-the-media/ page
+         ───────────────────────────────────────────────────────────────── -->
+    <div class="media-section-head">
+      <div class="row"><span class="gold-bar"></span><span class="eyebrow">In The Press</span><span class="gold-bar"></span></div>
+      <h2>Dr. Scottsdale&reg; <em>in</em> Print &amp; Online</h2>
+    </div>
+
+    <div class="media-grid">
+      <a href="https://www.menshealth.com/fitness/a37960715/abs-pecs-gladiator-cosmetic-surgery-liposuction/" target="_blank" rel="noopener" class="media-card">
+        <div class="outlet"><span class="dot"></span><span class="name">Men's Health</span></div>
+        <h3>20 Questions With a Man Who Had Gladiator&reg; Surgery</h3>
+        <p>An in-depth Men's Health interview with a Gladiator® patient — what made him choose Dr. Scottsdale®, what the procedure entailed, and how the abs-and-pecs sculpting changed his life.</p>
+        <span class="read-on">Read on Men's Health<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+      </a>
+
+      <a href="https://www.usatoday.com/story/sponsor-story/imperium-group/2022/05/24/keep-eye-out-these-companies-and-entrepreneurs-rise-2022/9763279002/" target="_blank" rel="noopener" class="media-card">
+        <div class="outlet"><span class="dot"></span><span class="name">USA Today</span></div>
+        <h3>Entrepreneurs &amp; Companies On The Rise</h3>
+        <p>USA Today profiles Dr. Scottsdale® among the entrepreneurs to watch — the story of building Natural Results into a destination practice with a national patient base.</p>
+        <span class="read-on">Read on USA Today<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+      </a>
+
+      <a href="https://news.yahoo.com/difference-between-botox-fillers-explained-115434569.html" target="_blank" rel="noopener" class="media-card">
+        <div class="outlet"><span class="dot"></span><span class="name">Yahoo News</span></div>
+        <h3>The Difference Between Botox &amp; Fillers — Explained</h3>
+        <p>Dr. Scottsdale® breaks down one of the most common patient questions for Yahoo News — when to choose Botox, when fillers make more sense, and how to read what your face actually needs.</p>
+        <span class="read-on">Read on Yahoo<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+      </a>
+
+      <a href="https://www.laweekly.com/dr-scottsdale-shares-his-insights-on-the-latest-trends-in-plastic-surgery/" target="_blank" rel="noopener" class="media-card">
+        <div class="outlet"><span class="dot"></span><span class="name">LA Weekly</span></div>
+        <h3>Insights on the Latest Trends in Plastic Surgery</h3>
+        <p>LA Weekly's profile on Dr. Scottsdale® — surgical philosophy, the procedures moving the field forward, and the role social media plays in modern aesthetics.</p>
+        <span class="read-on">Read on LA Weekly<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+      </a>
+
+      <a href="https://flaunt.com/content/doctor-scottsdale" target="_blank" rel="noopener" class="media-card">
+        <div class="outlet"><span class="dot"></span><span class="name">Flaunt Magazine</span></div>
+        <h3>Doctor Scottsdale&reg; — A Brand Built On Results</h3>
+        <p>Flaunt profiles the brand behind the practice. How a Harvard-trained surgeon became the most-followed plastic surgery name in the country, and what comes next.</p>
+        <span class="read-on">Read on Flaunt<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+      </a>
+
+      <a href="http://voyagephoenix.com/interview/meet-dr-scottsdale-natural-results-plastic-surgery-carlos-mata-md-scottsdale/" target="_blank" rel="noopener" class="media-card">
+        <div class="outlet"><span class="dot"></span><span class="name">Voyage Phoenix</span></div>
+        <h3>Meet Dr. Scottsdale&reg; — The Local Interview</h3>
+        <p>Voyage Phoenix's signature long-form profile — Dr. Mata's path from Texas Medical Branch and Harvard to founding Natural Results in the heart of North Scottsdale.</p>
+        <span class="read-on">Read on Voyage Phoenix<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+      </a>
+
+      <a href="https://ventsmagazine.com/2020/06/17/dr-scottsdale-talks-about-high-definition-liposuction/" target="_blank" rel="noopener" class="media-card">
+        <div class="outlet"><span class="dot"></span><span class="name">Vents Magazine</span></div>
+        <h3>Talking High-Definition Liposuction</h3>
+        <p>Vents Magazine interview on HD lipo — what separates muscle-etching liposuction from traditional debulking, candidacy, and the techniques behind Scottsdale Skinny® and Gladiator®.</p>
+        <span class="read-on">Read on Vents<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+      </a>
+
+      <a href="https://disruptmagazine.com/dr-scottsdale-shares-insights-about-5-leading-trends-in-plastic-surgery-in-2020" target="_blank" rel="noopener" class="media-card">
+        <div class="outlet"><span class="dot"></span><span class="name">Disrupt Magazine</span></div>
+        <h3>5 Leading Trends in Plastic Surgery</h3>
+        <p>Disrupt asks Dr. Scottsdale® where the field is going — the rise of male aesthetics, body-contouring technology, the shift to less-invasive procedures, and the social-media effect.</p>
+        <span class="read-on">Read on Disrupt<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+      </a>
+
+      <a href="https://www.americadailypost.com/i-help-people-look-beautiful-on-their-own-terms-says-plastic-surgeon-dr-scottsdale/" target="_blank" rel="noopener" class="media-card">
+        <div class="outlet"><span class="dot"></span><span class="name">America Daily Post</span></div>
+        <h3>"Beautiful On Their Own Terms"</h3>
+        <p>Dr. Scottsdale®'s philosophy in his own words — why patient-led results matter more than a one-size-fits-all definition of beauty, and how that shapes every consult.</p>
+        <span class="read-on">Read on America Daily Post<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+      </a>
+
+      <a href="https://www.laprogressive.com/scottsdale/" target="_blank" rel="noopener" class="media-card">
+        <div class="outlet"><span class="dot"></span><span class="name">LA Progressive</span></div>
+        <h3>Dr. Scottsdale&reg; — Profile in Practice</h3>
+        <p>LA Progressive profiles the practice — board certification, training, the operating philosophy that drives a results-first approach to plastic surgery.</p>
+        <span class="read-on">Read on LA Progressive<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+      </a>
+
+      <a href="https://timebusinessnews.com/dr-scottsdale-recommends-minimally-invasive-procedures-as-an-alternative-to-full-blown-surgeries/" target="_blank" rel="noopener" class="media-card">
+        <div class="outlet"><span class="dot"></span><span class="name">Time Business News</span></div>
+        <h3>Minimally Invasive Alternatives to Full Surgery</h3>
+        <p>Time Business News covers Dr. Scottsdale®'s perspective on minimally-invasive options — when injectables, devices, or non-surgical contouring make more sense than the OR.</p>
+        <span class="read-on">Read on Time Business<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+      </a>
+
+      <a href="https://www.in2town.co.uk/health-and-lifestyle/interview-with-plastic-surgeon-dr-scottsdale/" target="_blank" rel="noopener" class="media-card">
+        <div class="outlet"><span class="dot"></span><span class="name">In2Town (UK)</span></div>
+        <h3>Interview with a Plastic Surgeon</h3>
+        <p>In2Town's UK-based interview — how American techniques and patient expectations differ, and what international patients should look for when choosing a surgeon.</p>
+        <span class="read-on">Read on In2Town<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+      </a>
+
+      <a href="https://www.theamericanreporter.com/dr-scottsdale-military-training-helped-me-become-a-focused-and-detail-oriented-plastic-surgeon/" target="_blank" rel="noopener" class="media-card">
+        <div class="outlet"><span class="dot"></span><span class="name">The American Reporter</span></div>
+        <h3>"Military Training Made Me a More Focused Surgeon"</h3>
+        <p>Dr. Mata's military medical background and how that discipline carries into the operating room — focus, detail, and the calm that defines a 25,000-procedure career.</p>
+        <span class="read-on">Read on The American Reporter<svg class="btn-arrow" viewBox="0 0 14 14" fill="none"><path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.5"/></svg></span>
+      </a>
+    </div>
+
+    <!-- ─────────────────────────────────────────────────────────────────
+         Awards & recognition — third-party, peer-reviewed, never paid
+         ───────────────────────────────────────────────────────────────── -->
     <div class="awards-strip">
       <div class="award-tile">
-        <img src="images/badge-castleconnolly.png" alt="Castle Connolly Top Doctor"/>
         <h4>Castle Connolly</h4>
-        <p>Top 1% of US Physicians. Peer-nominated, credentialed-reviewed. <strong>Cannot be purchased.</strong></p>
+        <p>Top Doctor — Top 1% of US Physicians. Peer-nominated, credentialed-reviewed. <strong>Cannot be purchased.</strong></p>
         <span class="since">Since 2018</span>
       </div>
       <div class="award-tile">
-        <img src="images/badge-abps.png" alt="American Board of Plastic Surgery"/>
         <h4>Board Certified</h4>
-        <p>American Board of Plastic Surgery diplomate. The gold standard credential for plastic surgery.</p>
+        <p>American Board of Plastic Surgery diplomate (ABPS / FACS) — the gold-standard credential in plastic surgery.</p>
         <span class="since">Board Certified</span>
       </div>
       <div class="award-tile">
-        <img src="images/badge-realself.png" alt="RealSelf Top Doctor"/>
-        <h4>RealSelf Top Doctor</h4>
-        <p>Recognized by RealSelf based on verified patient reviews and Q&amp;A engagement.</p>
-        <span class="since">Patient Verified</span>
+        <h4>AZ Top Docs</h4>
+        <p>Approved by AZ Top Docs for 2025 — recognized credentials, experience, and patient-centered care across Arizona.</p>
+        <span class="since">2025 Honoree</span>
       </div>
     </div>
   </div>
@@ -191,8 +353,8 @@
 </footer>
 
 <button class="fab-ask" aria-label="Open Ask Dr. Scottsdale"><span class="avatar-s">S</span><span class="label">Ask Dr. Scottsdale</span></button>
-<button class="fab-book" aria-label="Book a consultation"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 6h12M6 1v4M10 1v4" stroke="currentColor" stroke-width="1.5"/></svg>Book Consult</button>
+<button class="fab-book" aria-label="Book a consultation" data-floating-widget-pill><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 6h12M6 1v4M10 1v4" stroke="currentColor" stroke-width="1.5"/></svg>Book Consult</button>
 
-<script src="scripts.js?v=5" defer></script>
+<script src="scripts.js?v=6" defer></script>
 </body>
 </html>

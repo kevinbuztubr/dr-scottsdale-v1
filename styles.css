@@ -294,24 +294,43 @@ p b { font-weight: 400; }
 .ask-composer button:hover { transform: translateY(-1px); }
 
 /* ──────────────────────────────────────────────────────────────────
-   Lead-capture modal (Book Consult)
+   Lead-capture widget — corner-pop panel (mirrors NRPS FloatingContactWidget)
+   Anchored bottom-right next to the .fab-book pill; never takes over the page.
+   On narrow viewports it scales to a near-full panel without locking scroll.
    ────────────────────────────────────────────────────────────────── */
 .lead-modal {
-  position: fixed; inset: 0; z-index: 999;
-  background: rgba(14,0,31,0.85); backdrop-filter: blur(8px);
-  display: none; align-items: center; justify-content: center; padding: 1rem;
+  position: fixed;
+  /* Sit just above the .fab-book pill (which lives at bottom: 1.5rem; right: 1.5rem
+     and is ~2.75rem tall). Stack the panel on top of it with a 0.75rem gap. */
+  bottom: calc(1.5rem + 2.75rem + 0.75rem);
+  right: 1.5rem;
+  z-index: 60;
+  display: none;
+  /* No backdrop, no flex centering — this is a floating panel, not a modal overlay. */
 }
-.lead-modal.show { display: flex; }
+.lead-modal.show { display: block; animation: leadPopIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes leadPopIn { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
 /* v1.5 step-based widget — menu + per-action forms */
-.lead-card-menu { padding: 0; max-width: 30rem; width: 100%; max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; }
-.lead-card-menu .lead-close { position: absolute; top: 0.75rem; right: 0.75rem; z-index: 5; }
-.lead-card-menu .lead-step { display: none; padding: 2rem 1.5rem 1.5rem; overflow-y: auto; }
+.lead-card-menu {
+  position: relative;
+  padding: 0;
+  width: min(92vw, 380px);
+  max-height: min(82vh, 640px);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--deep) 0%, var(--deeper) 100%);
+  border: 1px solid rgba(212,168,83,0.3); border-radius: var(--r-lg);
+  box-shadow: 0 30px 80px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,168,83,0.06) inset;
+}
+.lead-card-menu .lead-close { position: absolute; top: 0.625rem; right: 0.75rem; z-index: 5; }
+.lead-card-menu .lead-step { display: none; padding: 1.5rem 1.25rem 1.25rem; overflow-y: auto; }
 .lead-card-menu .lead-step[data-active="true"] { display: block; animation: leadFadeIn 0.3s ease; }
-@keyframes leadFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes leadFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 .lead-card-menu .lead-back {
   background: transparent; border: 0; color: var(--gold);
   font-family: 'Inter', sans-serif; font-weight: 500; font-size: 0.8125rem;
-  cursor: pointer; padding: 0.25rem 0.5rem; margin: 0 0 0.875rem -0.5rem;
+  cursor: pointer; padding: 0.25rem 0.5rem; margin: 0 0 0.625rem -0.5rem;
   letter-spacing: 0.02em; transition: color 0.3s ease;
 }
 .lead-card-menu .lead-back:hover { color: var(--gold-light); }
@@ -350,23 +369,18 @@ p b { font-weight: 400; }
 .lead-proc-row .lead-proc-desc { color: rgba(245,240,230,0.62); font-size: 0.75rem; }
 
 #iq-selected-proc em { color: var(--gold); font-style: normal; font-weight: 500; }
-.lead-card {
-  position: relative; width: 100%; max-width: 32rem;
-  background: linear-gradient(180deg, var(--deep) 0%, var(--deeper) 100%);
-  border: 1px solid rgba(212,168,83,0.3); border-radius: var(--r-lg);
-  padding: 2rem 1.75rem; max-height: 90vh; overflow-y: auto;
-  box-shadow: 0 50px 100px -30px rgba(0,0,0,0.8);
-}
 .lead-close {
-  position: absolute; top: 0.875rem; right: 1rem; background: transparent; border: 0;
-  color: rgba(245,240,230,0.6); font-size: 1.5rem; line-height: 1; cursor: pointer;
-  width: 2rem; height: 2rem; transition: color 0.3s ease;
+  position: absolute; top: 0.625rem; right: 0.75rem; background: transparent; border: 0;
+  color: rgba(245,240,230,0.6); font-size: 1.25rem; line-height: 1; cursor: pointer;
+  width: 1.875rem; height: 1.875rem; transition: color 0.3s ease;
+  display: inline-flex; align-items: center; justify-content: center;
 }
 .lead-close:hover { color: var(--gold); }
-.lead-head { text-align: center; margin-bottom: 1.5rem; }
-.lead-head .row { display: inline-flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
-.lead-head h3 { font-family: 'Bebas Neue', sans-serif; text-transform: uppercase; color: var(--pearl); font-size: 1.625rem; line-height: 1.1; margin-bottom: 0.625rem; }
-.lead-head p { color: rgba(245,240,230,0.75); font-size: 0.875rem; line-height: 1.55; }
+/* Compact left-aligned header for the corner panel (was center-aligned in the old modal). */
+.lead-head { text-align: left; margin-bottom: 1rem; }
+.lead-head .row { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 0.625rem; }
+.lead-head h3 { font-family: 'Bebas Neue', sans-serif; text-transform: uppercase; color: var(--pearl); font-size: 1.25rem; line-height: 1.15; margin-bottom: 0.5rem; }
+.lead-head p { color: rgba(245,240,230,0.75); font-size: 0.8125rem; line-height: 1.5; }
 .lead-form label { display: block; margin-bottom: 0.875rem; font-family: 'Inter', sans-serif; font-size: 0.8125rem; color: rgba(245,240,230,0.8); font-weight: 500; }
 .lead-form .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
 .lead-form input, .lead-form textarea {

@@ -341,22 +341,37 @@
       card.scrollTop = 0;
     }
 
+    // v1.6 — corner-pop widget. NO body scroll lock and NO full-page backdrop.
+    // The panel anchors next to the .fab-book pill in the bottom-right corner
+    // and never takes over the page; clicking outside it (anywhere that isn't
+    // the panel or the pill) closes it, matching the NRPS UX.
     function openModal() {
       modal.classList.add('show');
-      document.body.style.overflow = 'hidden';
       showStep('menu');
       const askPanel = document.getElementById('ask-panel');
       if (askPanel) askPanel.classList.remove('show');
     }
     function closeModal() {
       modal.classList.remove('show');
-      document.body.style.overflow = '';
     }
 
-    if (fab) fab.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
-    closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    if (fab) fab.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (modal.classList.contains('show')) closeModal(); else openModal();
+    });
+    closeBtn.addEventListener('click', (e) => { e.stopPropagation(); closeModal(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('show')) closeModal(); });
+    // Outside-click handler — since the panel no longer has a covering backdrop,
+    // we close on any click that isn't inside the panel or on the FAB pill.
+    document.addEventListener('click', (e) => {
+      if (!modal.classList.contains('show')) return;
+      if (modal.contains(e.target)) return;
+      if (fab && fab.contains(e.target)) return;
+      // Also ignore clicks on the [data-book-cta] CTA buttons — those open it.
+      if (e.target.closest && e.target.closest('[data-book-cta]')) return;
+      closeModal();
+    });
     document.addEventListener('click', (e) => {
       const target = e.target.closest('[data-book-cta]');
       if (!target) return;
