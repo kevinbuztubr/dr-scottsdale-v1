@@ -21,6 +21,89 @@
   const PAGE_LOAD_TS = Date.now();
 
   // ────────────────────────────────────────────────────────────────────
+  // Analytics — GTM dataLayer push helper
+  // ────────────────────────────────────────────────────────────────────
+  //
+  // GTM-NN23WX4F is installed in <head> of every page. This site's GTM
+  // container is its own — explicitly NOT the Natural Results container.
+  // Inside GTM, configure your GA4 / Google Ads / Meta pixels and use these
+  // event names as triggers. Naming convention is consistent across the
+  // whole site so dashboards can group/funnel cleanly.
+  //
+  // Events emitted (full coverage of the patient journey):
+  //   page_view_extra        — once on load (in addition to GTM's default page view)
+  //                            includes page_category derived from URL
+  //   widget_open            — Book Consult pill click → menu opens
+  //   widget_close           — Menu / flow closed without conversion
+  //   instant_quote_start    — User picked Instant Quote from the menu
+  //   iq_gender_selected     — Step 1 complete (value: female|male)
+  //   iq_area_selected       — Step 2 complete (value: area key, e.g. "body")
+  //   iq_service_selected    — Each service add (value: service id, running total)
+  //   iq_estimate_view       — Step 4 estimate rendered (value: estimate_min/max, monthly)
+  //   instant_quote_submit   — Form submission successful → GHL created lead
+  //   book_consult_start     — User picked Book a Consultation from the menu
+  //   book_consult_submit    — Book Consult form successfully submitted
+  //   text_us_start          — User picked Text Us
+  //   text_us_submit         — Text Us form successfully submitted
+  //   phone_call_click       — User tapped a tel: link (Call Us, etc.)
+  //   ask_dr_scottsdale_open — Ask Dr. Scottsdale chat opened
+  //   ask_dr_scottsdale_q    — User submitted a question to the chat
+  //   age_gate_confirmed     — 18+ confirmation on results pages
+  //
+  // All events carry: event (name), event_session (the per-page-load session id),
+  // event_property ("drscottsdaleaz.com"), and event_value (when meaningful).
+  // GTM converts these to GA4 events with parameters via the gtag dataLayer
+  // recipe, so you get Looker / Explorations slicing out of the box.
+
+  const SITE = "drscottsdaleaz.com";
+  function pageCategory() {
+    const p = window.location.pathname.toLowerCase().replace(/\/$/, "");
+    if (p === "" || p === "/") return "home";
+    if (p.includes("scottsdale-skinny") || p.includes("gladiator") || p.includes("magic-shot")) return "signature_procedure";
+    if (p.includes("breast-aug") || p.includes("breast-lift") || p.includes("tummy") || p.includes("gynecomastia") || p.includes("safe-bbl")) return "procedure";
+    if (p.includes("about")) return "about";
+    if (p.includes("scottsdale-plastic-surgeon")) return "local_landing";
+    if (p.includes("results")) return "results_gallery";
+    if (p.includes("testimonials")) return "testimonials";
+    if (p.includes("media")) return "media";
+    return "other";
+  }
+  const PAGE_CATEGORY = pageCategory();
+
+  function track(event, props) {
+    try {
+      window.dataLayer = window.dataLayer || [];
+      const payload = Object.assign(
+        {
+          event,
+          event_session: SESSION_ID,
+          event_property: SITE,
+          page_category: PAGE_CATEGORY,
+        },
+        props || {},
+      );
+      window.dataLayer.push(payload);
+    } catch (_) {
+      // Never break the page over a tracking failure.
+    }
+  }
+
+  // Emit on every load — gives GTM a hook beyond its built-in page_view
+  // so we can distinguish "Dr. Scottsdale page_view" from default.
+  track("page_view_extra", { page_url: window.location.href, page_title: document.title });
+
+  // Global tel: click instrumentation — catches every call CTA across the site
+  // even ones outside the widget (footer phone, hero CTA, etc.).
+  document.addEventListener("click", (e) => {
+    const tel = e.target.closest && e.target.closest('a[href^="tel:"]');
+    if (!tel) return;
+    track("phone_call_click", {
+      tel: tel.getAttribute("href"),
+      from_widget: !!tel.closest(".lead-menu-row"),
+    });
+  });
+
+  // ────────────────────────────────────────────────────────────────────
   // Phone & catalog config
   // ────────────────────────────────────────────────────────────────────
 
@@ -185,8 +268,12 @@
     fab.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
+      const willOpen = !panel.classList.contains('show');
       panel.classList.toggle('show');
-      if (panel.classList.contains('show')) input.focus();
+      if (willOpen) {
+        input.focus();
+        track('ask_dr_scottsdale_open');
+      }
     });
     close.addEventListener('click', (e) => { e.stopPropagation(); panel.classList.remove('show'); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') panel.classList.remove('show'); });
@@ -225,6 +312,8 @@
       if (!text) return;
       input.value = '';
       if (chips) chips.style.display = 'none';
+
+      track('ask_dr_scottsdale_q', { question_chars: text.length, question_count: messages.filter((m) => m.role === 'user').length + 1 });
 
       messages.push({ role: 'user', content: text });
       appendMsg('user', text);
@@ -529,8 +618,14 @@
       // Kick off catalog load if not already loaded (so it's ready when they
       // reach the services step).
       loadCatalog().catch(() => { /* swallow — services step will show error */ });
+      track('widget_open');
     }
-    function closeModal() { modal.classList.remove('show'); }
+    function closeModal() {
+      // Only fire widget_close if user closed without converting (didn't reach thanks).
+      const wasOnThanks = state.step === 'thanks';
+      modal.classList.remove('show');
+      if (!wasOnThanks) track('widget_close', { last_step: state.step });
+    }
 
     if (fab) fab.addEventListener('click', (e) => {
       e.preventDefault();
@@ -561,6 +656,21 @@
         if (next === 'iq-area') renderAreas();
         if (next === 'iq-services') renderServices();
         if (next === 'iq-estimate') renderEstimate();
+        // Top-level menu choices fire start events so funnel reports can
+        // see how many people pick each path off the corner pill.
+        if (next === 'iq-gender') track('instant_quote_start');
+        if (next === 'book-consult') track('book_consult_start');
+        if (next === 'text-us') track('text_us_start');
+        if (next === 'iq-estimate') {
+          const range = calcRange(state.selections);
+          track('iq_estimate_view', {
+            selection_count: state.selections.length,
+            estimate_min: range.min,
+            estimate_max: range.max,
+            gender: state.gender || undefined,
+            area_of_concern: state.area ? (AREAS[state.area]?.label || undefined) : undefined,
+          });
+        }
         showStep(next);
         return;
       }
@@ -574,6 +684,7 @@
     modal.querySelectorAll('.iq-gender-card').forEach((btn) => {
       btn.addEventListener('click', () => {
         state.gender = btn.dataset.gender;
+        track('iq_gender_selected', { gender: state.gender });
         state.area = null;
         state.selections = [];
         modal.querySelectorAll('.iq-gender-card').forEach((b) =>
@@ -603,6 +714,7 @@
       list.querySelectorAll('.iq-area-row').forEach((btn) => {
         btn.addEventListener('click', async () => {
           state.area = btn.dataset.area;
+          track('iq_area_selected', { area: state.area, area_label: AREAS[state.area]?.label });
           state.selections = [];
           // Make sure the catalog has loaded before we render services.
           try {
@@ -892,6 +1004,24 @@
           modal.querySelector('#thanks-body').textContent = isText
             ? `Dr. Scottsdale's team will text you back from ${PHONE_DISPLAY} — keep an eye on your phone.`
             : `Your request has been received. A member of our team will reach out within 24 hours.`;
+          // Conversion events fired ONLY after GHL upstream returned ok.
+          // These map to GA4 conversion / Google Ads conversion / Meta lead event in GTM.
+          if (action === 'Instant Quote') {
+            const range = calcRange(state.selections);
+            track('instant_quote_submit', {
+              selection_count: state.selections.length,
+              estimate_min: range.min,
+              estimate_max: range.max,
+              gender: state.gender || undefined,
+              area_of_concern: state.area ? (AREAS[state.area]?.label || undefined) : undefined,
+              preferred_contact: state.preferredContact,
+              best_time: state.bestTime,
+            });
+          } else if (action === 'Book Appointment') {
+            track('book_consult_submit');
+          } else if (action === 'Text Us') {
+            track('text_us_submit');
+          }
           showStep('thanks');
           return true;
         } else {
@@ -952,6 +1082,7 @@
         try { sessionStorage.setItem(STORAGE_KEY, '1'); } catch (_) {}
         gate.classList.remove('show');
         document.body.style.overflow = '';
+        track('age_gate_confirmed');
       } else if (action === 'exit') {
         window.location.href = 'index.html';
       }
