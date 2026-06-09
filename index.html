@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Italianno&display=swap" />
 <!-- Shared stylesheet provides ask-panel, age-gate, consent-badge, global p strong softener -->
-<link rel="stylesheet" href="styles.css?v=21" />
+<link rel="stylesheet" href="styles.css?v=22" />
 <style>
   :root {
     --deeper: #0E001F;
@@ -571,7 +571,12 @@
   <div class="container">
     <div class="grid">
       <div class="portrait-wrap">
-        <img src="images/dr-mata.jpg" alt="Dr. Carlos Mata — Dr. Scottsdale®" />
+        <!-- Hero portrait: dark-scrubs (the dark-blue Carlos Mata MD scrubs portrait
+             Gunn uploaded). The previous white-coat portrait moved to the Ask
+             Dr. Scottsdale section. The scrubs portrait reads as more clinically
+             professional and matches the dark+gold athletic-luxe brand at first
+             impression. -->
+        <img src="images/dr-mata-scrubs.jpg" alt="Dr. Carlos Mata — Dr. Scottsdale®" onerror="this.onerror=null;this.src='images/dr-mata.jpg';" />
         <div class="portrait-tag">
           <div class="name">Dr. Scottsdale</div>
           <div class="desc">Scottsdale · Arizona</div>
@@ -905,6 +910,16 @@
           philosophy, and pricing. Get real answers about Scottsdale Skinny®,
           Gladiator®, Magic Shot®, or anything else — instantly, no scheduling required.
         </p>
+        <!-- White-coat headshot anchors the doctor in the Ask section so the
+             AI assistant has a clear face attached. Per Gunn's ask after the
+             hero swap moved the dark-scrubs portrait to the top of the page. -->
+        <div style="margin: 1.5rem 0; display: flex; align-items: center; gap: 1rem;">
+          <img src="images/dr-mata.jpg" alt="Dr. Carlos Mata — Dr. Scottsdale®" style="width: 6rem; height: 6rem; border-radius: 50%; object-fit: cover; object-position: center top; border: 2px solid var(--gold); box-shadow: 0 0 0 4px rgba(212,168,83,0.12);" />
+          <div style="display:flex; flex-direction:column; gap:0.125rem;">
+            <span style="font-family: 'Italianno', cursive; color: var(--gold); font-size: 1.5rem; line-height:1;">Dr. Scottsdale</span>
+            <span style="font-family: 'Bebas Neue', sans-serif; color: rgba(245,240,230,0.65); font-size: 0.6875rem; letter-spacing: 0.32em; text-transform: uppercase;">Dr. Carlos Mata · ABPS · FACS</span>
+          </div>
+        </div>
         <div class="ds-meta">Powered by Anthropic · Private · 24 / 7</div>
       </div>
       <div class="chat">

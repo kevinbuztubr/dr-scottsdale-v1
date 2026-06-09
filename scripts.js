@@ -220,6 +220,64 @@
   // Ask Dr. Scottsdale chat — streaming  (unchanged from v1.5)
   // ────────────────────────────────────────────────────────────────────
 
+  // Bridge: homepage's embedded "Ask Dr. Scottsdale" section has its own
+  // .preset buttons + composer. These were originally decorative — no JS
+  // wiring. This bridge opens the floating Ask Dr. Scottsdale panel and
+  // submits the question through the same flow, so:
+  //   1. The pipe is consistent (one chat impl, one logging path)
+  //   2. Queries log to admin portal via nr-website /api/ask-dr-mata →
+  //      nrps-admin /api/public/log-chat with siteSource: "drscottsdaleaz.com"
+  //   3. Conversation history persists if the user keeps typing
+  function wireHomepageAskBridge() {
+    const presets = document.querySelectorAll('section.ask .preset');
+    const composerInput = document.querySelector('section.ask .composer input');
+    const composerSend = document.querySelector('section.ask .composer .send');
+    if (!presets.length && !composerInput) return;
+
+    function submitToFloatingAsk(text) {
+      if (!text || !text.trim()) return;
+      const panel = document.getElementById('ask-panel');
+      const fab = document.querySelector('.fab-ask');
+      if (!panel || !fab) return;
+      // Open the floating panel
+      if (!panel.classList.contains('show')) panel.classList.add('show');
+      // Fire engagement event so the bridge is visible in analytics
+      track('ask_dr_scottsdale_open', { source: 'homepage_section' });
+      // Populate the floating composer's input and submit
+      const floatInput = panel.querySelector('#ask-input');
+      const floatForm = panel.querySelector('#ask-composer');
+      if (!floatInput || !floatForm) return;
+      floatInput.value = text.trim();
+      floatForm.requestSubmit();
+    }
+
+    presets.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        submitToFloatingAsk(btn.textContent.trim());
+      });
+    });
+
+    if (composerInput) {
+      composerInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          const val = composerInput.value;
+          composerInput.value = '';
+          submitToFloatingAsk(val);
+        }
+      });
+    }
+    if (composerSend) {
+      composerSend.addEventListener('click', (e) => {
+        e.preventDefault();
+        const val = composerInput ? composerInput.value : '';
+        if (composerInput) composerInput.value = '';
+        submitToFloatingAsk(val);
+      });
+    }
+  }
+
   function wireAskWidget() {
     const fab = document.querySelector('.fab-ask');
     if (!fab) return;
