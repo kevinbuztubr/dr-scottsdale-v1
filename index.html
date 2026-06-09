@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Italianno&display=swap" />
 <!-- Shared stylesheet provides ask-panel, age-gate, consent-badge, global p strong softener -->
-<link rel="stylesheet" href="styles.css?v=17" />
+<link rel="stylesheet" href="styles.css?v=18" />
 <style>
   :root {
     --deeper: #0E001F;
@@ -465,7 +465,21 @@
   section.cta .inner { text-align: center; position: relative; z-index: 2; }
   section.cta .row { display: inline-flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
   section.cta h2 { font-size: clamp(3.5rem, 9vw, 7rem) !important; line-height: 0.95 !important; max-width: 50rem; margin: 0 auto; }
-  section.cta .script-line { font-family: 'Italianno', cursive; color: var(--gold); font-size: 5.5rem; font-style: italic; }
+  /* Match the top-menu logo treatment: cursive in proper case, NOT all-caps.
+     The parent .section h2 inherits text-transform: uppercase, which was
+     force-capping "Dr. Scottsdale" into "DR. SCOTTSDALE" — looked wrong in
+     script type. Explicit overrides so the script reads like the brand mark. */
+  section.cta .script-line {
+    font-family: 'Italianno', cursive;
+    color: var(--gold);
+    font-size: clamp(4.5rem, 11vw, 9rem);
+    font-style: normal;
+    text-transform: none;
+    letter-spacing: 0;
+    line-height: 0.9;
+    display: inline-block;
+    vertical-align: baseline;
+  }
   section.cta p { margin: 2rem auto 0; max-width: 32rem; color: rgba(245,240,230,0.8); font-size: 1.125rem; line-height: 1.6; }
   section.cta .ctas { margin-top: 2.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
 
