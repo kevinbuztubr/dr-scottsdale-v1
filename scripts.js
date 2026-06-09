@@ -238,7 +238,84 @@
   //     answers stream in (NRPS lesson: scroll inside container, never
   //     scrollIntoView on a sentinel — that yanks the whole page).
   // ────────────────────────────────────────────────────────────────────
-  function wireHomepageAskInline() {
+  // ────────────────────────────────────────────────────────────────────
+  // Mobile hamburger menu — injected into every nav.top on page load.
+  //
+  // The shared CSS hides nav.top .links at ≤900px (display:none) but
+  // there was no fallback navigation, leaving mobile users stranded on
+  // whatever page they landed on. This injects:
+  //   1. A hamburger button visible only on mobile (CSS handles the
+  //      show/hide via media query).
+  //   2. A full-screen drawer that mirrors the desktop links + adds a
+  //      Book Consult CTA at the bottom.
+  // ────────────────────────────────────────────────────────────────────
+  function wireMobileNav() {
+    const nav = document.querySelector('nav.top .row');
+    if (!nav) return;
+    if (nav.querySelector('.nav-hamburger')) return; // idempotent
+
+    // Mirror the existing desktop links so we have a single source of truth.
+    const desktopLinks = nav.querySelector('.links');
+    const linksHtml = desktopLinks ? desktopLinks.innerHTML : '';
+
+    // Build the hamburger button.
+    const hb = document.createElement('button');
+    hb.className = 'nav-hamburger';
+    hb.setAttribute('aria-label', 'Open navigation menu');
+    hb.setAttribute('aria-expanded', 'false');
+    hb.innerHTML = '<span></span><span></span><span></span>';
+
+    // Build the drawer.
+    const drawer = document.createElement('div');
+    drawer.className = 'nav-drawer';
+    drawer.setAttribute('aria-hidden', 'true');
+    drawer.innerHTML =
+      '<div class="nav-drawer-inner">' +
+        '<button class="nav-drawer-close" aria-label="Close menu">×</button>' +
+        '<div class="nav-drawer-links">' + linksHtml + '</div>' +
+        '<a href="#book" class="nav-drawer-cta" data-book-cta>Book Consult</a>' +
+        '<div class="nav-drawer-foot">' +
+          '<a href="tel:+14809148300">(480) 914-8300</a>' +
+          '<span>7930 E Thompson Peak Pkwy · Scottsdale</span>' +
+        '</div>' +
+      '</div>';
+
+    // Insert hamburger before the desktop CTA, drawer at body end.
+    const cta = nav.querySelector('.cta');
+    if (cta) nav.insertBefore(hb, cta); else nav.appendChild(hb);
+    document.body.appendChild(drawer);
+
+    function open() {
+      drawer.classList.add('show');
+      drawer.setAttribute('aria-hidden', 'false');
+      hb.setAttribute('aria-expanded', 'true');
+      hb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      drawer.classList.remove('show');
+      drawer.setAttribute('aria-hidden', 'true');
+      hb.setAttribute('aria-expanded', 'false');
+      hb.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    hb.addEventListener('click', (e) => {
+      e.stopPropagation();
+      drawer.classList.contains('show') ? close() : open();
+    });
+    drawer.querySelector('.nav-drawer-close').addEventListener('click', close);
+    // Close drawer on any in-drawer link click (so the user navigates).
+    drawer.querySelectorAll('.nav-drawer-links a, .nav-drawer-cta').forEach((a) => {
+      a.addEventListener('click', () => close());
+    });
+    // Esc closes the drawer.
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && drawer.classList.contains('show')) close();
+    });
+  }
+
+  function wireMobileNav();
+      wireHomepageAskInline() {
     const section = document.querySelector('section.ask');
     if (!section) return;
     const body = section.querySelector('.chat .body');
@@ -1250,12 +1327,14 @@
       wireAskWidget();
       wireBookWidget();
       wireAgeGate();
+      wireMobileNav();
       wireHomepageAskInline();
     });
   } else {
     wireAskWidget();
     wireBookWidget();
     wireAgeGate();
-    wireHomepageAskInline();
+    wireMobileNav();
+      wireHomepageAskInline();
   }
 })();

@@ -649,3 +649,134 @@ section.ask .chat .body .iq-bubble.iq-thinking {
   font-style: italic;
   color: rgba(212,168,83,0.7);
 }
+
+/* ────────────────────────────────────────────────────────────────────
+   Mobile hamburger + drawer.
+   Injected by wireMobileNav() in scripts.js. Hidden on desktop.
+   ──────────────────────────────────────────────────────────────────── */
+.nav-hamburger {
+  display: none;
+  background: transparent;
+  border: 1px solid rgba(212,168,83,0.32);
+  border-radius: var(--r-md);
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  z-index: 10001;
+  margin-left: 0.5rem;
+}
+.nav-hamburger span {
+  display: block;
+  width: 1.125rem;
+  height: 1.5px;
+  background: var(--gold);
+  border-radius: 1px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
+
+.nav-drawer {
+  position: fixed;
+  inset: 0;
+  background: rgba(14,0,31,0.96);
+  backdrop-filter: blur(10px);
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-drawer.show {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0s linear 0s;
+}
+.nav-drawer-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2rem;
+  max-width: 22rem;
+  width: 100%;
+  position: relative;
+}
+.nav-drawer-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: 1px solid rgba(212,168,83,0.32);
+  border-radius: 50%;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--gold);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+.nav-drawer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.nav-drawer-links a {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pearl);
+  padding: 0.875rem 1.5rem;
+  transition: color 0.25s ease;
+}
+.nav-drawer-links a:hover, .nav-drawer-links a.active { color: var(--gold); }
+.nav-drawer-cta {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+  color: var(--deeper);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  padding: 1rem 2rem;
+  border-radius: var(--r-pill);
+  font-weight: 500;
+  min-width: 14rem;
+  text-align: center;
+}
+.nav-drawer-foot {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  color: rgba(245,240,230,0.6);
+  font-size: 0.8125rem;
+}
+.nav-drawer-foot a {
+  font-family: 'Bebas Neue', sans-serif;
+  color: var(--gold);
+  font-size: 1.125rem;
+  letter-spacing: 0.16em;
+}
+
+@media (max-width: 900px) {
+  .nav-hamburger { display: flex; }
+  /* Tighten the top CTA on mobile so the nav row doesn't overflow. */
+  nav.top .cta {
+    padding: 0.625rem 1.125rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
+  }
+}
