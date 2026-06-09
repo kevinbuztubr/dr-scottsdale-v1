@@ -314,8 +314,7 @@
     });
   }
 
-  function wireMobileNav();
-      wireHomepageAskInline() {
+  function wireHomepageAskInline() {
     const section = document.querySelector('section.ask');
     if (!section) return;
     const body = section.querySelector('.chat .body');
