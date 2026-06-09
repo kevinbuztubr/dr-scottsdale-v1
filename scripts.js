@@ -109,7 +109,7 @@
 
   // Same number the NRPS FloatingContactWidget uses — both sites funnel into
   // the same GHL location and the practice answers calls/texts on this line.
-  // (480) 914-8300 is the office switchboard; (480) 852-4999 is the GHL-routed
+  // (480) 852-4999 is the office switchboard; (480) 852-4999 is the GHL-routed
   // dedicated widget line. Per Gunn: brand-site widget must use the GHL line
   // so call & text flows match Natural Results 1:1.
   const PHONE = "+14808524999";
@@ -360,7 +360,7 @@
         '<div class="nav-drawer-links">' + linksHtml + '</div>' +
         '<a href="#book" class="nav-drawer-cta" data-book-cta>Book Consult</a>' +
         '<div class="nav-drawer-foot">' +
-          '<a href="tel:+14809148300">(480) 914-8300</a>' +
+          '<a href="tel:+14808524999">(480) 852-4999</a>' +
           '<span>7930 E Thompson Peak Pkwy · Scottsdale</span>' +
         '</div>' +
       '</div>';
