@@ -21,5 +21,39 @@
         { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
       ]
     }
+  ],
+  "redirects": [
+    { "source": "/in-the-media", "destination": "/media", "permanent": true },
+    { "source": "/in-the-media/", "destination": "/media", "permanent": true },
+    { "source": "/magic-shot-penis-filler", "destination": "/magic-shot", "permanent": true },
+    { "source": "/magic-shot-penis-filler/", "destination": "/magic-shot", "permanent": true },
+    { "source": "/penis-enlargement", "destination": "/magic-shot", "permanent": true },
+    { "source": "/penis-enlargement/", "destination": "/magic-shot", "permanent": true },
+    { "source": "/ba-gallery", "destination": "/results", "permanent": true },
+    { "source": "/ba-gallery/", "destination": "/results", "permanent": true },
+    { "source": "/ba-gallery/:slug*", "destination": "/results", "permanent": true },
+    { "source": "/safe-brazilian-butt-lift", "destination": "/safe-bbl", "permanent": true },
+    { "source": "/safe-brazilian-butt-lift/", "destination": "/safe-bbl", "permanent": true },
+    { "source": "/scottsdale-city-magazine", "destination": "/media", "permanent": true },
+    { "source": "/scottsdale-city-magazine/", "destination": "/media", "permanent": true },
+    { "source": "/drscottsdalexveronicaperasso", "destination": "/media", "permanent": true },
+    { "source": "/drscottsdalexveronicaperasso/", "destination": "/media", "permanent": true },
+    { "source": "/fashion-expo", "destination": "/media", "permanent": true },
+    { "source": "/fashion-expo/", "destination": "/media", "permanent": true },
+    { "source": "/sientra-gift-card", "destination": "/", "permanent": true },
+    { "source": "/sientra-gift-card/", "destination": "/", "permanent": true },
+    { "source": "/test-page", "destination": "/", "permanent": true },
+    { "source": "/test-page/", "destination": "/", "permanent": true },
+    { "source": "/free-consultation-with-dr-benjamin", "destination": "/", "permanent": true },
+    { "source": "/free-consultation-with-dr-benjamin/", "destination": "/", "permanent": true },
+    { "source": "/plastic-surgeon-dr-scottsdale-discusses-the-rising-public-interest-in-plastic-surgery-and-male-enhancement", "destination": "/about", "permanent": true },
+    { "source": "/plastic-surgeon-dr-scottsdale-discusses-the-rising-public-interest-in-plastic-surgery-and-male-enhancement/", "destination": "/about", "permanent": true },
+    { "source": "/dr-scottsdale-helping-people-with-thinking-about-cosmetic-surgery", "destination": "/about", "permanent": true },
+    { "source": "/dr-scottsdale-helping-people-with-thinking-about-cosmetic-surgery/", "destination": "/about", "permanent": true },
+    { "source": "/sitemap_index.xml", "destination": "/sitemap.xml", "permanent": true },
+    { "source": "/post-sitemap.xml", "destination": "/sitemap.xml", "permanent": true },
+    { "source": "/page-sitemap.xml", "destination": "/sitemap.xml", "permanent": true },
+    { "source": "/ba-gallery-sitemap.xml", "destination": "/sitemap.xml", "permanent": true },
+    { "source": "/all-procedures-sitemap.xml", "destination": "/sitemap.xml", "permanent": true }
   ]
 }
