@@ -1156,10 +1156,12 @@
       wireAskWidget();
       wireBookWidget();
       wireAgeGate();
+      wireHomepageAskBridge();
     });
   } else {
     wireAskWidget();
     wireBookWidget();
     wireAgeGate();
+    wireHomepageAskBridge();
   }
 })();
