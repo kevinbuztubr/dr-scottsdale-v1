@@ -253,7 +253,13 @@
 
     presets.forEach((btn) => {
       btn.addEventListener('click', (e) => {
+        // stopPropagation is CRITICAL — the floating panel has a document-
+        // level outside-click closer that removes the .show class on any
+        // click outside the panel. The preset button is outside the panel,
+        // so without stopPropagation the panel opens via this handler and
+        // then the same click bubbles up and immediately closes it again.
         e.preventDefault();
+        e.stopPropagation();
         submitToFloatingAsk(btn.textContent.trim());
       });
     });
@@ -262,6 +268,7 @@
       composerInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
           e.preventDefault();
+          e.stopPropagation();
           const val = composerInput.value;
           composerInput.value = '';
           submitToFloatingAsk(val);
@@ -271,6 +278,7 @@
     if (composerSend) {
       composerSend.addEventListener('click', (e) => {
         e.preventDefault();
+        e.stopPropagation();
         const val = composerInput ? composerInput.value : '';
         if (composerInput) composerInput.value = '';
         submitToFloatingAsk(val);
