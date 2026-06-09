@@ -249,14 +249,99 @@
   //   2. A full-screen drawer that mirrors the desktop links + adds a
   //      Book Consult CTA at the bottom.
   // ────────────────────────────────────────────────────────────────────
+  // List of trademarked + standard procedure pages. Used both by the desktop
+  // Signatures dropdown and the mobile drawer's sub-list. Single source of
+  // truth so they never drift.
+  const SIG_LINKS = [
+    { label: 'Scottsdale Skinny',  href: 'scottsdale-skinny.html',     tm: true,  section: 'signature' },
+    { label: 'Gladiator',          href: 'gladiator.html',             tm: true,  section: 'signature' },
+    { label: 'Magic Shot',         href: 'magic-shot.html',            tm: true,  section: 'signature' },
+    { label: 'Breast Augmentation',href: 'breast-augmentation.html',   tm: false, section: 'procedure' },
+    { label: 'Breast Lift',        href: 'breast-lift.html',           tm: false, section: 'procedure' },
+    { label: 'Tummy Tuck',         href: 'tummy-tuck.html',            tm: false, section: 'procedure' },
+    { label: 'Safe BBL',           href: 'safe-bbl.html',              tm: false, section: 'procedure' },
+    { label: 'Gynecomastia',       href: 'gynecomastia.html',          tm: false, section: 'procedure' },
+  ];
+
+  function buildSigsDropdownHtml() {
+    const sigs = SIG_LINKS.filter((l) => l.section === 'signature');
+    const procs = SIG_LINKS.filter((l) => l.section === 'procedure');
+    function link(l) {
+      const tm = l.tm ? '<span class="tm">®</span>' : '';
+      return '<a href="' + l.href + '">' + l.label + tm + '</a>';
+    }
+    return (
+      '<div class="dd-section">Signature Procedures</div>' +
+      sigs.map(link).join('') +
+      '<div class="dd-divider"></div>' +
+      '<div class="dd-section">Procedures</div>' +
+      procs.map(link).join('')
+    );
+  }
+
+  // Replace the Signatures link in nav.top .links with a dropdown.
+  function wireDesktopSignaturesDropdown() {
+    const links = document.querySelectorAll('nav.top .links a');
+    let sigLink = null;
+    links.forEach((a) => {
+      const t = (a.textContent || '').trim().toLowerCase();
+      if (t === 'signatures' || t === 'signature') sigLink = a;
+    });
+    if (!sigLink) return;
+
+    const wrap = document.createElement('span');
+    wrap.className = 'has-dropdown';
+    sigLink.parentNode.insertBefore(wrap, sigLink);
+    wrap.appendChild(sigLink);
+
+    const menu = document.createElement('div');
+    menu.className = 'dropdown-menu';
+    menu.innerHTML = buildSigsDropdownHtml();
+    wrap.appendChild(menu);
+
+    // Click on the parent link should jump to the in-page anchor on the homepage,
+    // but on a procedure page it should go to the homepage's #signature anchor.
+    // We leave the original href alone — hover reveals the dropdown for granular nav.
+
+    // Mobile touch fallback: tap toggles
+    sigLink.addEventListener('click', (e) => {
+      if (window.matchMedia('(hover: none)').matches) {
+        e.preventDefault();
+        wrap.classList.toggle('open');
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (!wrap.contains(e.target)) wrap.classList.remove('open');
+    });
+  }
+
   function wireMobileNav() {
     const nav = document.querySelector('nav.top .row');
     if (!nav) return;
     if (nav.querySelector('.nav-hamburger')) return; // idempotent
 
-    // Mirror the existing desktop links so we have a single source of truth.
-    const desktopLinks = nav.querySelector('.links');
-    const linksHtml = desktopLinks ? desktopLinks.innerHTML : '';
+    // Mirror the existing desktop links. Signatures becomes an expandable
+    // sub-list with the SIG_LINKS entries; other links stay as plain anchors.
+    const desktopLinks = nav.querySelectorAll('.links > a');
+    let linksHtml = '';
+    desktopLinks.forEach((a) => {
+      const label = (a.textContent || '').trim();
+      const href = a.getAttribute('href') || '#';
+      const isSigs = label.toLowerCase() === 'signatures' || label.toLowerCase() === 'signature';
+      if (isSigs) {
+        const subItems = SIG_LINKS.map((l) => {
+          const tm = l.tm ? '<span class="tm" style="color:var(--gold);font-size:0.625rem;margin-left:0.125rem;">®</span>' : '';
+          return '<a href="' + l.href + '">' + l.label + tm + '</a>';
+        }).join('');
+        linksHtml +=
+          '<div class="has-sub">' +
+            '<button type="button" aria-expanded="false">' + label + '</button>' +
+            '<div class="sub-list">' + subItems + '</div>' +
+          '</div>';
+      } else {
+        linksHtml += '<a href="' + href + '">' + label + '</a>';
+      }
+    });
 
     // Build the hamburger button.
     const hb = document.createElement('button');
@@ -280,10 +365,19 @@
         '</div>' +
       '</div>';
 
-    // Insert hamburger before the desktop CTA, drawer at body end.
-    const cta = nav.querySelector('.cta');
-    if (cta) nav.insertBefore(hb, cta); else nav.appendChild(hb);
+    // Append hamburger at the END so it sits far-right per Gunn's feedback.
+    nav.appendChild(hb);
     document.body.appendChild(drawer);
+
+    // Wire the expandable Signatures sub-list inside the drawer.
+    drawer.querySelectorAll('.has-sub > button').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const parent = btn.closest('.has-sub');
+        const expanded = parent.classList.toggle('open');
+        btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      });
+    });
 
     function open() {
       drawer.classList.add('show');
@@ -1318,6 +1412,99 @@
   }
 
   // ────────────────────────────────────────────────────────────────────
+  // Animations — IntersectionObserver fade-up + hero entrance + auto-decorate
+  //
+  // Strategy: rather than hand-annotate every element across 14 pages, we
+  // auto-decorate sensible defaults (section h2, section.row, .sig-card,
+  // etc.) with data-anim="fade-up" on page load, plus an IO that flips
+  // .in-view when they enter the viewport. Respects prefers-reduced-motion.
+  // ────────────────────────────────────────────────────────────────────
+
+  function wireAnimations() {
+    if (!('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Auto-decorate: every section header (h2, .eyebrow row) + cards get a
+    // fade-up animation. Hero gets a staggered entrance.
+    const autoTargets = [
+      // Section heads
+      'section h2',
+      'section.section .eyebrow',
+      'section.section p.lead',
+      'section.section .gold-bar',
+      // Cards
+      '.sig-card', '.proc-card', '.home-card', '.video-card', '.press-card',
+      '.test-card', '.fact-card', '.ba-pair', '.iq-msg',
+      // Standalone media
+      'section.results .ba-pair',
+      'section.press .press-card',
+      'section.media .media-card',
+      // Footer bits (subtle)
+      'footer .brand-script', 'footer h4',
+    ];
+    autoTargets.forEach((sel) => {
+      document.querySelectorAll(sel).forEach((el) => {
+        if (!el.hasAttribute('data-anim')) el.setAttribute('data-anim', 'fade-up');
+      });
+    });
+
+    // Hero entrance — staggered, runs as soon as the hero is in view.
+    const hero = document.querySelector('section.hero');
+    if (hero) {
+      const heroSteps = [
+        hero.querySelector('.row'),
+        hero.querySelector('h1'),
+        hero.querySelector('.sub, p.sub'),
+        hero.querySelector('p.lead, .desc'),
+        hero.querySelector('.cta, .row .cta'),
+        hero.querySelector('.as-seen, .as-featured, .outlets'),
+        hero.querySelector('.portrait-wrap'),
+      ].filter(Boolean);
+      heroSteps.forEach((el, i) => {
+        el.setAttribute('data-anim', 'fade-up');
+        el.setAttribute('data-delay', String(Math.min(i * 100, 500)));
+        // Hero is above-the-fold — force in-view on next frame so the
+        // entrance plays on initial paint instead of waiting for scroll.
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => el.classList.add('in-view'));
+        });
+      });
+    }
+
+    // Observer for everything else (below-the-fold).
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('[data-anim="fade-up"]').forEach((el) => {
+      if (!el.classList.contains('in-view')) io.observe(el);
+    });
+  }
+
+  // Smooth-scroll for anchor links with offset for sticky nav.
+  function wireSmoothScroll() {
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      const id = a.getAttribute('href');
+      if (!id || id === '#' || id === '#!') return;
+      const target = document.querySelector(id);
+      if (!target) return;
+      // Don't intercept floating-widget triggers
+      if (a.hasAttribute('data-book-cta')) return;
+      e.preventDefault();
+      const navH = document.querySelector('nav.top')?.offsetHeight || 0;
+      const y = target.getBoundingClientRect().top + window.scrollY - navH - 12;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    });
+  }
+
+  // ────────────────────────────────────────────────────────────────────
   // Boot
   // ────────────────────────────────────────────────────────────────────
 
@@ -1327,13 +1514,19 @@
       wireBookWidget();
       wireAgeGate();
       wireMobileNav();
+      wireDesktopSignaturesDropdown();
       wireHomepageAskInline();
+      wireAnimations();
+      wireSmoothScroll();
     });
   } else {
     wireAskWidget();
     wireBookWidget();
     wireAgeGate();
     wireMobileNav();
+      wireDesktopSignaturesDropdown();
       wireHomepageAskInline();
+      wireAnimations();
+      wireSmoothScroll();
   }
 })();

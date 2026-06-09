@@ -780,3 +780,272 @@ section.ask .chat .body .iq-bubble.iq-thinking {
     letter-spacing: 0.16em;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   v2.4 — Mobile fixes, Signatures dropdown, sitewide animations.
+   Comprehensive QA/QC pass from Gunn's feedback:
+     1. Mobile header: hamburger to far right, hide top CTA on mobile
+     2. Mobile footer: center-align + readable
+     3. Signatures dropdown (desktop hover + mobile expand)
+     4. Sitewide animations (fade-up on scroll, hero stagger, button micro)
+     5. Suppress fab-ask on homepage (body.no-fab-ask)
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Hide fab-ask when body says so (homepage suppresses it) ──────────── */
+body.no-fab-ask .fab-ask { display: none !important; }
+
+/* ─── Desktop Signatures dropdown ──────────────────────────────────────── */
+nav.top .has-dropdown { position: relative; }
+nav.top .has-dropdown > a { display: inline-flex; align-items: center; gap: 0.25rem; }
+nav.top .has-dropdown > a::after {
+  content: '';
+  width: 0; height: 0;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 3.5px solid currentColor;
+  opacity: 0.55;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+nav.top .has-dropdown:hover > a::after,
+nav.top .has-dropdown.open > a::after {
+  transform: rotate(180deg);
+  opacity: 1;
+}
+nav.top .dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(-6px);
+  min-width: 16rem;
+  padding: 0.75rem;
+  background: linear-gradient(180deg, var(--deep) 0%, var(--deeper) 100%);
+  border: 1px solid rgba(212,168,83,0.32);
+  border-radius: var(--r-md);
+  box-shadow: 0 24px 60px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,168,83,0.05) inset;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 100;
+  display: flex; flex-direction: column; gap: 0.125rem;
+}
+nav.top .has-dropdown:hover .dropdown-menu,
+nav.top .has-dropdown.open .dropdown-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+nav.top .dropdown-menu a {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.875rem;
+  border-radius: var(--r-sm);
+  color: rgba(245,240,230,0.85);
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 0.875rem;
+  letter-spacing: 0;
+  text-transform: none;
+  transition: all 0.2s ease;
+}
+nav.top .dropdown-menu a:hover {
+  background: rgba(212,168,83,0.08);
+  color: var(--gold);
+  padding-left: 1.125rem;
+}
+nav.top .dropdown-menu a .tm {
+  font-size: 0.625rem;
+  color: var(--gold);
+  margin-left: 0.125rem;
+  opacity: 0.85;
+}
+nav.top .dropdown-menu .dd-section {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.625rem;
+  letter-spacing: 0.28em;
+  color: rgba(212,168,83,0.5);
+  text-transform: uppercase;
+  padding: 0.5rem 0.875rem 0.25rem;
+  pointer-events: none;
+}
+nav.top .dropdown-menu .dd-divider {
+  height: 1px;
+  margin: 0.375rem 0.625rem;
+  background: linear-gradient(90deg, transparent, rgba(212,168,83,0.18), transparent);
+}
+
+/* ─── Mobile drawer Signatures expandable sub-list ─────────────────────── */
+.nav-drawer-links .has-sub > button {
+  background: transparent;
+  border: none;
+  color: var(--pearl);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.875rem 1.5rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  justify-content: center;
+}
+.nav-drawer-links .has-sub > button::after {
+  content: '';
+  width: 0; height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid var(--gold);
+  transition: transform 0.25s ease;
+}
+.nav-drawer-links .has-sub.open > button::after { transform: rotate(180deg); }
+.nav-drawer-links .has-sub .sub-list {
+  display: none;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding: 0.5rem 0 0.25rem;
+  border-left: 1px solid rgba(212,168,83,0.18);
+  margin: 0.25rem auto 0.5rem;
+  max-width: 16rem;
+}
+.nav-drawer-links .has-sub.open .sub-list { display: flex; }
+.nav-drawer-links .has-sub .sub-list a {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 300;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 0.5rem 1rem;
+  color: rgba(245,240,230,0.85);
+}
+
+/* ─── ANIMATIONS ───────────────────────────────────────────────────────── */
+/* Fade-up on scroll — applied via Intersection Observer (data-anim attr).
+   We respect prefers-reduced-motion so users with motion sensitivity see
+   the final state immediately. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-anim="fade-up"] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s cubic-bezier(.16,.84,.36,1), transform 0.7s cubic-bezier(.16,.84,.36,1);
+    will-change: opacity, transform;
+  }
+  [data-anim="fade-up"].in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  [data-anim="fade-up"][data-delay="100"] { transition-delay: 0.1s; }
+  [data-anim="fade-up"][data-delay="200"] { transition-delay: 0.2s; }
+  [data-anim="fade-up"][data-delay="300"] { transition-delay: 0.3s; }
+  [data-anim="fade-up"][data-delay="400"] { transition-delay: 0.4s; }
+  [data-anim="fade-up"][data-delay="500"] { transition-delay: 0.5s; }
+
+  /* Gold-bar draw-in: the eyebrow rules across the site */
+  [data-anim="gold-bar"] .gold-bar,
+  [data-anim="gold-bar"] {
+    transform-origin: left center;
+    transform: scaleX(0);
+    transition: transform 0.8s cubic-bezier(.65,0,.35,1) 0.2s;
+  }
+  [data-anim="gold-bar"].in-view .gold-bar,
+  [data-anim="gold-bar"].in-view {
+    transform: scaleX(1);
+  }
+
+  /* Hero portrait subtle float — feels alive but not jarring */
+  section.hero .portrait-wrap img {
+    animation: drScHeroFloat 8s ease-in-out infinite;
+  }
+  @keyframes drScHeroFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  /* Button micro-interactions — lift + glow on hover */
+  .cta, .fab-book, section.hero .row .cta, a.cta {
+    transition: transform 0.3s cubic-bezier(.16,.84,.36,1),
+                box-shadow 0.3s cubic-bezier(.16,.84,.36,1),
+                filter 0.3s ease;
+  }
+  .cta:hover, .fab-book:hover, section.hero .row .cta:hover, a.cta:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 14px 38px -8px rgba(212,168,83,0.6), 0 0 0 1px rgba(255,255,255,0.08) inset;
+    filter: brightness(1.08);
+  }
+  .cta:active, a.cta:active { transform: translateY(0) scale(0.99); }
+
+  /* Card lifts on hover (signature cards, procedure cards, etc.) */
+  .sig-card, .proc-card, .testimonial, .home-card, .video-card, .press-card {
+    transition: transform 0.4s cubic-bezier(.16,.84,.36,1),
+                border-color 0.4s ease,
+                box-shadow 0.4s ease;
+  }
+  .sig-card:hover, .proc-card:hover, .home-card:hover, .video-card:hover, .press-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(212,168,83,0.45);
+    box-shadow: 0 22px 50px -18px rgba(0,0,0,0.6);
+  }
+
+  /* Smooth-scroll for anchors */
+  html { scroll-behavior: smooth; }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   MOBILE FIXES — @media (max-width: 900px) overrides
+   ════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  /* HEADER: hamburger to far right, hide top CTA (drawer + bottom CTA cover it) */
+  nav.top .row {
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+  nav.top .brand { flex: 1 1 auto; min-width: 0; }
+  nav.top .brand .word { font-size: 1.75rem; }
+  nav.top .brand .tag { font-size: 8.5px; letter-spacing: 0.2em; }
+  nav.top .cta {
+    display: none; /* drawer cta + bottom fab-book cover this */
+  }
+  nav.top .nav-hamburger {
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  /* DESKTOP DROPDOWN: hide on mobile (drawer has its own sub-list) */
+  nav.top .dropdown-menu { display: none; }
+
+  /* FOOTER: center-align everything */
+  footer .inner {
+    text-align: center;
+    grid-template-columns: 1fr;
+    gap: 2.25rem;
+    padding: 3rem 1.25rem;
+  }
+  footer .brand-script { text-align: center; }
+  footer .desc { max-width: none; text-align: center; margin: 0 auto; }
+  footer .socials { justify-content: center; }
+  footer .addr { text-align: center; }
+  footer .phone { margin-left: auto; margin-right: auto; }
+  footer h4 { text-align: center; }
+  footer ul { padding: 0; }
+  footer ul li { text-align: center; }
+  footer .bottom {
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem 1.25rem;
+  }
+  footer .bottom .legal { justify-content: center; flex-wrap: wrap; }
+
+  /* Floating FABs: tighten spacing on mobile so they don't dominate */
+  .fab-ask, .fab-book {
+    padding: 0.625rem 1rem;
+    font-size: 0.75rem;
+    bottom: 1rem;
+  }
+  .fab-ask { left: 0.875rem; }
+  .fab-book { right: 0.875rem; }
+}
