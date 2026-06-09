@@ -607,3 +607,45 @@ p b { font-weight: 400; }
   .ask-panel-chat { width: calc(100vw - 3rem); }
   .lead-form .row-2 { grid-template-columns: 1fr; }
 }
+
+/* ────────────────────────────────────────────────────────────────────
+   Homepage Ask Dr. Scottsdale — inline chat bubbles.
+   Used by wireHomepageAskInline() in scripts.js. Mirrors NRPS
+   HomepageAskDrMata visual language: user-right-aligned gold-edged
+   bubbles, bot-left-aligned royal-purple bubbles, thinking pulse.
+   ──────────────────────────────────────────────────────────────────── */
+section.ask .chat .body .iq-msg {
+  display: flex;
+  width: 100%;
+}
+section.ask .chat .body .iq-msg-user { justify-content: flex-end; }
+section.ask .chat .body .iq-msg-bot { justify-content: flex-start; }
+section.ask .chat .body .iq-bubble {
+  max-width: 85%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--r-lg);
+  font-size: 0.875rem;
+  line-height: 1.55;
+  word-wrap: break-word;
+}
+section.ask .chat .body .iq-msg-user .iq-bubble {
+  background: linear-gradient(135deg, rgba(212,168,83,0.18) 0%, rgba(212,168,83,0.08) 100%);
+  border: 1px solid rgba(212,168,83,0.32);
+  color: var(--pearl);
+  border-bottom-right-radius: 0.25rem;
+}
+section.ask .chat .body .iq-msg-bot .iq-bubble {
+  background: rgba(61,0,102,0.32);
+  border: 1px solid rgba(212,168,83,0.18);
+  color: rgba(245,240,230,0.92);
+  border-bottom-left-radius: 0.25rem;
+}
+@keyframes drScottsdalePulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+section.ask .chat .body .iq-bubble.iq-thinking {
+  animation: drScottsdalePulse 1.4s ease-in-out infinite;
+  font-style: italic;
+  color: rgba(212,168,83,0.7);
+}

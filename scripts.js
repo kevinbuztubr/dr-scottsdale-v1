@@ -220,70 +220,156 @@
   // Ask Dr. Scottsdale chat — streaming  (unchanged from v1.5)
   // ────────────────────────────────────────────────────────────────────
 
-  // Bridge: homepage's embedded "Ask Dr. Scottsdale" section has its own
-  // .preset buttons + composer. These were originally decorative — no JS
-  // wiring. This bridge opens the floating Ask Dr. Scottsdale panel and
-  // submits the question through the same flow, so:
-  //   1. The pipe is consistent (one chat impl, one logging path)
-  //   2. Queries log to admin portal via nr-website /api/ask-dr-mata →
-  //      nrps-admin /api/public/log-chat with siteSource: "drscottsdaleaz.com"
-  //   3. Conversation history persists if the user keeps typing
-  function wireHomepageAskBridge() {
-    const presets = document.querySelectorAll('section.ask .preset');
-    const composerInput = document.querySelector('section.ask .composer input');
-    const composerSend = document.querySelector('section.ask .composer .send');
-    if (!presets.length && !composerInput) return;
+  // ────────────────────────────────────────────────────────────────────
+  // Homepage Ask Dr. Scottsdale — SELF-CONTAINED INLINE CHAT.
+  //
+  // Mirrors nr-website's HomepageAskDrMata.tsx component exactly: the
+  // homepage section IS the chat. It does NOT open the floating widget.
+  // The two chats are fully independent — user can chat in either; one
+  // does not prompt the other open.
+  //
+  // Wire:
+  //   - section.ask .body becomes a scrollable message list
+  //   - preset clicks send the message inline (stream into body)
+  //   - composer input/Enter/Send sends inline (stream into body)
+  //   - POSTs to /api/chat (same-origin proxy → nr-website /api/ask-dr-mata
+  //     → nrps-admin /api/public/log-chat with siteSource: drscottsdaleaz.com)
+  //   - Body has a fixed height so the page below it doesn't shift as
+  //     answers stream in (NRPS lesson: scroll inside container, never
+  //     scrollIntoView on a sentinel — that yanks the whole page).
+  // ────────────────────────────────────────────────────────────────────
+  function wireHomepageAskInline() {
+    const section = document.querySelector('section.ask');
+    if (!section) return;
+    const body = section.querySelector('.chat .body');
+    const composer = section.querySelector('.composer');
+    const presets = section.querySelectorAll('.preset');
+    const input = composer?.querySelector('input');
+    const sendBtn = composer?.querySelector('.send');
+    if (!body || !composer || !input || !sendBtn) return;
 
-    function submitToFloatingAsk(text) {
-      if (!text || !text.trim()) return;
-      const panel = document.getElementById('ask-panel');
-      const fab = document.querySelector('.fab-ask');
-      if (!panel || !fab) return;
-      // Open the floating panel
-      if (!panel.classList.contains('show')) panel.classList.add('show');
-      // Fire engagement event so the bridge is visible in analytics
-      track('ask_dr_scottsdale_open', { source: 'homepage_section' });
-      // Populate the floating composer's input and submit
-      const floatInput = panel.querySelector('#ask-input');
-      const floatForm = panel.querySelector('#ask-composer');
-      if (!floatInput || !floatForm) return;
-      floatInput.value = text.trim();
-      floatForm.requestSubmit();
+    // Stable session id so multi-turn conversation logs group in admin
+    const sessionId = (typeof crypto !== 'undefined' && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : Math.random().toString(36).slice(2) + Date.now().toString(36);
+
+    // Conversation history (role/content)
+    const messages = [];
+    let streaming = false;
+
+    // Lock the body to a fixed height so it doesn't grow & push elements
+    // below it down as messages stream in. Same lesson as NRPS.
+    body.style.height = '360px';
+    body.style.maxHeight = '360px';
+    body.style.overflowY = 'auto';
+    body.style.display = 'flex';
+    body.style.flexDirection = 'column';
+    body.style.gap = '0.75rem';
+
+    // Stash original intro contents so we can mark it as the welcome message
+    // The HTML already had: <p>Hello...</p>, then a "Try Asking" label, then presets.
+    // We keep the welcome <p> + presets visible until the first user message
+    // is sent; then we hide presets but keep the welcome.
+
+    const presetWrap = section.querySelector('.presets');
+    const presetEyebrow = body.querySelector('.eyebrow');
+
+    function escapeHtml(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    function renderMessage(role, content) {
+      const div = document.createElement('div');
+      div.className = role === 'user' ? 'iq-msg iq-msg-user' : 'iq-msg iq-msg-bot';
+      div.dataset.role = role;
+      const bubble = document.createElement('div');
+      bubble.className = 'iq-bubble';
+      bubble.innerHTML = escapeHtml(content).replace(/\n/g, '<br/>');
+      div.appendChild(bubble);
+      body.appendChild(div);
+      // Scroll the body container, NOT the page. scrollIntoView on a
+      // sentinel yanks the page up — direct scrollTop is scoped.
+      requestAnimationFrame(() => { body.scrollTop = body.scrollHeight; });
+      return bubble;
+    }
+    function streamInto(bubble, content) {
+      bubble.innerHTML = escapeHtml(content).replace(/\n/g, '<br/>');
+      requestAnimationFrame(() => { body.scrollTop = body.scrollHeight; });
     }
 
+    async function sendMessage(text) {
+      const trimmed = (text || '').trim();
+      if (!trimmed || streaming) return;
+      streaming = true;
+
+      // Hide the presets after the first user message so the inline chat
+      // can use the full body. Welcome <p> stays for context.
+      if (presetWrap) presetWrap.style.display = 'none';
+      if (presetEyebrow) presetEyebrow.style.display = 'none';
+
+      track('ask_dr_scottsdale_q', { source: 'homepage_section' });
+
+      renderMessage('user', trimmed);
+      const botBubble = renderMessage('assistant', '…');
+      botBubble.classList.add('iq-thinking');
+      input.value = '';
+
+      messages.push({ role: 'user', content: trimmed });
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            procedureSlug: 'homepage',
+            procedureName: 'Dr. Scottsdale® — Natural Results Plastic Surgery',
+            context: 'Topic: drscottsdaleaz.com homepage Ask. Dr. Scottsdale® (Dr. Carlos Mata) is a Harvard-trained, board-certified plastic surgeon in Scottsdale, AZ. Signature trademarked procedures: Scottsdale Skinny® (lipo 360 + fat transfer + high-def etching), Gladiator® (male high-def body contouring), Magic Shot® (non-surgical penile enhancement). Practice: Natural Results Plastic Surgery, AAAASF-accredited surgical suite. 25,000+ procedures. Help the visitor narrow down what they want, point to procedure pages for specifics, refer them to a consultation for candidacy or plan recommendations. Do not quote dollar prices — refer to the Instant Quote Tool or consult. Never refer users outside the practice ("see your doctor" / "consult a physician") — always default to "schedule a consultation with Dr. Scottsdale" since they\'re already on his site.',
+            messages: messages.slice(),
+            sessionId,
+          }),
+        });
+        if (!res.ok || !res.body) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || 'Could not reach Dr. Scottsdale right now.');
+        }
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let acc = '';
+        botBubble.classList.remove('iq-thinking');
+        botBubble.innerHTML = '';
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          acc += decoder.decode(value, { stream: true });
+          streamInto(botBubble, acc);
+        }
+        messages.push({ role: 'assistant', content: acc });
+      } catch (e) {
+        botBubble.classList.remove('iq-thinking');
+        botBubble.innerHTML = escapeHtml('Sorry — I couldn\'t reach Dr. Scottsdale right now. Please try again, or use the floating Ask widget in the corner.');
+      } finally {
+        streaming = false;
+      }
+    }
+
+    // Wire preset buttons → send inline (no floating-widget bridge).
     presets.forEach((btn) => {
       btn.addEventListener('click', (e) => {
-        // stopPropagation is CRITICAL — the floating panel has a document-
-        // level outside-click closer that removes the .show class on any
-        // click outside the panel. The preset button is outside the panel,
-        // so without stopPropagation the panel opens via this handler and
-        // then the same click bubbles up and immediately closes it again.
         e.preventDefault();
-        e.stopPropagation();
-        submitToFloatingAsk(btn.textContent.trim());
+        sendMessage(btn.textContent.trim());
       });
     });
 
-    if (composerInput) {
-      composerInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          e.stopPropagation();
-          const val = composerInput.value;
-          composerInput.value = '';
-          submitToFloatingAsk(val);
-        }
-      });
-    }
-    if (composerSend) {
-      composerSend.addEventListener('click', (e) => {
+    // Wire composer input → Enter sends, Send button sends.
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        e.stopPropagation();
-        const val = composerInput ? composerInput.value : '';
-        if (composerInput) composerInput.value = '';
-        submitToFloatingAsk(val);
-      });
-    }
+        sendMessage(input.value);
+      }
+    });
+    sendBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      sendMessage(input.value);
+    });
   }
 
   function wireAskWidget() {
@@ -1164,12 +1250,12 @@
       wireAskWidget();
       wireBookWidget();
       wireAgeGate();
-      wireHomepageAskBridge();
+      wireHomepageAskInline();
     });
   } else {
     wireAskWidget();
     wireBookWidget();
     wireAgeGate();
-    wireHomepageAskBridge();
+    wireHomepageAskInline();
   }
 })();
