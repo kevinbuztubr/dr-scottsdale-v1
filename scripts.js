@@ -1283,7 +1283,11 @@
       const payload = {
         contact: {
           firstName: String(fd.get('firstName') || '').trim(),
-          lastName: String(fd.get('lastName') || '').trim() || '(none)',
+          // Send empty when the patient leaves last name blank. The admin
+          // server treats lastName as optional and scrubs legacy filler
+          // tokens like "(Text Us)" / "(none)" so the GHL contact name
+          // stays clean (just the first name, no redundant suffix).
+          lastName: String(fd.get('lastName') || '').trim(),
           email: String(fd.get('email') || '').trim() || undefined,
           phone: String(fd.get('phone') || '').trim(),
         },
