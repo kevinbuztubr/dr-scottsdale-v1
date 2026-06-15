@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "echo 'Static HTML — no dev server needed. Use vercel dev for /api routes.'",
-    "build": "echo 'No build step — static HTML.'"
+    "check:schema": "node scripts/schema-canary.mjs",
+    "build": "node scripts/schema-canary.mjs"
   }
 }

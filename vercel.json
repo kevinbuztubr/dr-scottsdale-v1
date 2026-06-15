@@ -3,7 +3,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "outputDirectory": ".",
-  "buildCommand": null,
+  "buildCommand": "node scripts/schema-canary.mjs",
   "framework": null,
   "headers": [
     {
