@@ -13,7 +13,8 @@
     "check:claims": "node scripts/clinical-claims-canary.mjs",
     "check:services": "node scripts/unverified-service-canary.mjs",
     "check:dashes": "node scripts/em-dash-canary.mjs",
-    "check:all": "npm run check:schema && npm run check:benjamin && npm run check:claims && npm run check:services && npm run check:dashes",
+    "check:glance": "node scripts/at-a-glance-canary.mjs",
+    "check:all": "npm run check:schema && npm run check:benjamin && npm run check:claims && npm run check:services && npm run check:dashes && npm run check:glance",
     "build": "npm run check:all"
   }
 }
