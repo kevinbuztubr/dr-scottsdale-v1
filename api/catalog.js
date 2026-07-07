@@ -1,14 +1,14 @@
 /**
- * /api/catalog — Server-side proxy for the live Dr. Mata procedure catalog.
+ * /api/catalog - Server-side proxy for the live Dr. Mata procedure catalog.
  *
  * Why a proxy (vs. fetching nr-website directly from the browser):
- *   - Same-origin from the browser's POV — no CORS, no preflight, no
+ *   - Same-origin from the browser's POV - no CORS, no preflight, no
  *     "Origin not allowed" failure modes when Vercel routes are in
  *     between us and the upstream.
  *   - The widget needs to load fast on every page view; a server-side
  *     fetch lets us cache at the edge (s-maxage=60) without
  *     fighting Vary: Origin semantics on the upstream side.
- *   - Mirrors the existing /api/lead and /api/chat pattern — every
+ *   - Mirrors the existing /api/lead and /api/chat pattern - every
  *     cross-property call goes through a thin same-origin proxy.
  *
  * Filter:
@@ -61,7 +61,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  // Filter to Dr. Mata only — this is the surgical brand site.
+  // Filter to Dr. Mata only - this is the surgical brand site.
   const drMataOnly = services.filter((s) => s && s.provider === "dr-mata");
 
   // Cache at the edge for 60s; widget UX doesn't need second-by-second

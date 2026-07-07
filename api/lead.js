@@ -1,5 +1,5 @@
 /**
- * /api/lead — Dr. Scottsdale® lead-submission proxy.
+ * /api/lead - Dr. Scottsdale® lead-submission proxy.
  *
  * Flow:
  *   browser
@@ -15,13 +15,13 @@
  *     rotate, no secret-parity risk between this project and nrps-admin.
  *   - Per-property attribution (siteSource="drscottsdaleaz.com") is enforced
  *     in TWO places: this function stamps it, AND the relay re-stamps it
- *     unconditionally. Defense in depth — a hostile caller can't impersonate
+ *     unconditionally. Defense in depth - a hostile caller can't impersonate
  *     Natural Results' source even if they bypass this function.
  *
  * Defense in depth:
  *   - 8 KB body cap
- *   - Honeypot field "company_website" — non-empty silently 200's the bot
- *   - Time-on-page check — sub-2-second form submits silently 200 (bot)
+ *   - Honeypot field "company_website" - non-empty silently 200's the bot
+ *   - Time-on-page check - sub-2-second form submits silently 200 (bot)
  *   - PHI-masked logs only
  */
 
@@ -71,7 +71,7 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  // Honeypot — silent 200 on bot detection.
+  // Honeypot - silent 200 on bot detection.
   if (payload && typeof payload.company_website === "string" && payload.company_website.trim().length > 0) {
     res.status(200).json({ ok: true });
     return;

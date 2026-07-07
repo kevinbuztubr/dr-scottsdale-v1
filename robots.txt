@@ -1,10 +1,10 @@
 User-agent: *
 Allow: /
 
-# Block API endpoints from indexing — they're function endpoints, not pages.
+# Block API endpoints from indexing - they're function endpoints, not pages.
 Disallow: /api/
 
-# AI/LLM crawlers — explicitly allowed (AEO play). These bots respect
+# AI/LLM crawlers - explicitly allowed (AEO play). These bots respect
 # robots.txt for content fetching; allowing them grows Dr. Scottsdale's
 # presence in ChatGPT, Perplexity, Claude, etc. answers.
 User-agent: GPTBot

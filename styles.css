@@ -1,4 +1,4 @@
-/* Dr. Scottsdale shared styles — used by every page so the design stays
+/* Dr. Scottsdale shared styles - used by every page so the design stays
    in lock-step across home, procedure detail pages, and the results gallery. */
 :root {
   --deeper: #0E001F;
@@ -61,7 +61,7 @@ nav.top .brand { display: flex; flex-direction: column; align-items: flex-start;
 nav.top .brand .word { font-family: 'Italianno', cursive; color: var(--gold); font-size: 2.25rem; }
 nav.top .brand .tag { font-family: 'Bebas Neue', sans-serif; font-size: 10px; letter-spacing: 0.32em; color: rgba(245,240,230,0.6); text-transform: uppercase; margin-top: 0.125rem; }
 /* Nav menu links use the body font treatment (Inter 300, no letter-spacing,
-   proper case) so they read as approachable body text — not the heavier
+   proper case) so they read as approachable body text - not the heavier
    500-weight tracked-out display style they had before. Matches the rest
    of the page copy. */
 nav.top .links { display: flex; gap: 2.5rem; font-family: 'Inter', sans-serif; font-weight: 300; font-size: 0.9375rem; letter-spacing: 0; text-transform: none; }
@@ -119,7 +119,7 @@ section.page-hero .ctas { margin-top: 2.5rem; display: flex; gap: 1rem; flex-wra
 .section { padding: 6rem 0; }
 .section h2 { font-family: 'Bebas Neue', sans-serif; text-transform: uppercase; color: var(--pearl); font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1; }
 
-/* B&A grid — used by gallery + procedure pages */
+/* B&A grid - used by gallery + procedure pages */
 .ba-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
 .ba-card { border-radius: var(--r-lg); overflow: hidden; border: 1px solid rgba(212,168,83,0.18); background: var(--deep); transition: all 0.4s ease; }
 .ba-card:hover { border-color: rgba(212,168,83,0.45); box-shadow: 0 20px 50px -20px rgba(139,0,212,0.4); transform: translateY(-2px); }
@@ -131,7 +131,7 @@ section.page-hero .ctas { margin-top: 2.5rem; display: flex; gap: 1rem; flex-wra
 .ba-card .meta .procedure { font-family: 'Bebas Neue', sans-serif; text-transform: uppercase; color: var(--pearl); letter-spacing: 0.04em; font-size: 1rem; }
 .ba-card .meta .meta-tag { font-size: 0.75rem; color: rgba(245,240,230,0.55); }
 
-/* Procedure detail — the rich "what / how / recovery" block */
+/* Procedure detail - the rich "what / how / recovery" block */
 .proc-grid { display: grid; grid-template-columns: 5fr 7fr; gap: 4rem; align-items: start; }
 .proc-side { position: sticky; top: 8rem; display: flex; flex-direction: column; gap: 1.25rem; }
 .proc-side .fact-card { background: var(--deep); border: 1px solid rgba(212,168,83,0.18); border-radius: var(--r-lg); padding: 1.5rem; }
@@ -143,7 +143,7 @@ section.page-hero .ctas { margin-top: 2.5rem; display: flex; gap: 1rem; flex-wra
 .proc-body h3 { font-family: 'Bebas Neue', sans-serif; text-transform: uppercase; color: var(--pearl); letter-spacing: 0.005em; font-size: 1.5rem; margin: 2.5rem 0 1rem; }
 .proc-body h3:first-child { margin-top: 0; }
 .proc-body p { color: rgba(245,240,230,0.82); font-size: 1.0625rem; line-height: 1.75; margin-bottom: 1.15rem; font-weight: 300; }
-/* Subtle italic accent — no aggressive bold. Reads as a phrase elevation, not a tag-link. */
+/* Subtle italic accent - no aggressive bold. Reads as a phrase elevation, not a tag-link. */
 .proc-body p strong, .proc-body li strong { color: var(--gold-light); font-weight: 400; font-style: italic; letter-spacing: 0.005em; }
 .proc-body ul { list-style: none; padding: 0; margin: 1.25rem 0; }
 .proc-body ul li { padding: 0.75rem 0 0.75rem 1.5rem; border-bottom: 1px solid rgba(212,168,83,0.1); position: relative; font-size: 0.9375rem; color: rgba(245,240,230,0.85); line-height: 1.55; }
@@ -155,12 +155,12 @@ section.page-hero .ctas { margin-top: 2.5rem; display: flex; gap: 1rem; flex-wra
 .gal-filter button:hover { border-color: var(--gold); color: var(--gold); }
 .gal-filter button.active { background: linear-gradient(135deg, #E8C97A 0%, #D4A853 50%, #B8933E 100%); color: var(--deeper); border-color: transparent; }
 
-/* Global typography refinement — kill aggressive bold sitewide.
+/* Global typography refinement - kill aggressive bold sitewide.
    Bold body copy reads tacky in luxury context. Replace with subtle italic + gold tint. */
 p strong, li strong { color: var(--gold-light); font-weight: 400; font-style: italic; letter-spacing: 0.005em; }
 p b { font-weight: 400; }
 
-/* 18+ B&A age-gate modal — required compliance for surgical results imagery */
+/* 18+ B&A age-gate modal - required compliance for surgical results imagery */
 .age-gate {
   position: fixed; inset: 0; z-index: 1000;
   background: rgba(14,0,31,0.92); backdrop-filter: blur(12px);
@@ -247,7 +247,7 @@ p b { font-weight: 400; }
 }
 
 /* ──────────────────────────────────────────────────────────────────
-   Streaming chat panel — overrides default ask-panel for chat mode
+   Streaming chat panel - overrides default ask-panel for chat mode
    ────────────────────────────────────────────────────────────────── */
 .ask-panel-chat { width: 24rem; max-height: 32rem; display: flex; flex-direction: column; }
 .ask-panel-chat .chat-body { max-height: 22rem; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
@@ -298,7 +298,7 @@ p b { font-weight: 400; }
 .ask-composer button:hover { transform: translateY(-1px); }
 
 /* ──────────────────────────────────────────────────────────────────
-   Lead-capture widget — corner-pop panel (mirrors NRPS FloatingContactWidget)
+   Lead-capture widget - corner-pop panel (mirrors NRPS FloatingContactWidget)
    Anchored bottom-right next to the .fab-book pill; never takes over the page.
    On narrow viewports it scales to a near-full panel without locking scroll.
    ────────────────────────────────────────────────────────────────── */
@@ -310,12 +310,12 @@ p b { font-weight: 400; }
   right: 1.5rem;
   z-index: 60;
   display: none;
-  /* No backdrop, no flex centering — this is a floating panel, not a modal overlay. */
+  /* No backdrop, no flex centering - this is a floating panel, not a modal overlay. */
 }
 .lead-modal.show { display: block; animation: leadPopIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
 @keyframes leadPopIn { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-/* v1.5 step-based widget — menu + per-action forms */
+/* v1.5 step-based widget - menu + per-action forms */
 .lead-card-menu {
   position: relative;
   padding: 0;
@@ -406,10 +406,10 @@ p b { font-weight: 400; }
 .lead-status-err { background: rgba(220,80,80,0.1); color: #f4a3a3; border: 1px solid rgba(220,80,80,0.3); }
 
 /* ──────────────────────────────────────────────────────────────────
-   Instant Quote (NRPS-parity) — multi-step flow inside the corner panel
+   Instant Quote (NRPS-parity) - multi-step flow inside the corner panel
    ────────────────────────────────────────────────────────────────── */
 
-/* Step 1: Gender — 2-card grid */
+/* Step 1: Gender - 2-card grid */
 .iq-gender-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.625rem; margin-top: 1rem; }
 .iq-gender-card {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.625rem;
@@ -423,7 +423,7 @@ p b { font-weight: 400; }
 .iq-gender-card.active { border-color: var(--gold); background: rgba(212,168,83,0.1); color: var(--gold-light); }
 .iq-gender-card svg { width: 1.75rem; height: 1.75rem; }
 
-/* Step 2: Area — list of rows */
+/* Step 2: Area - list of rows */
 .iq-area-list { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 1rem; }
 .iq-area-row {
   display: flex; align-items: center; gap: 0.875rem; width: 100%;
@@ -438,7 +438,7 @@ p b { font-weight: 400; }
 .iq-area-row .iq-area-sub { color: rgba(245,240,230,0.55); font-size: 0.7rem; }
 .iq-area-row .chev { color: var(--gold); font-size: 1.125rem; line-height: 1; opacity: 0.6; }
 
-/* Step 3: Services — scrollable list + sticky footer */
+/* Step 3: Services - scrollable list + sticky footer */
 .iq-services-scroll {
   display: flex; flex-direction: column; gap: 0.4rem;
   max-height: 28rem; overflow-y: auto;
@@ -530,7 +530,7 @@ p b { font-weight: 400; }
 
 .iq-empty { text-align: center; padding: 2rem 0.5rem; color: rgba(245,240,230,0.55); font-size: 0.8125rem; }
 
-/* Step 4: Estimate — hero price card + line-item breakdown */
+/* Step 4: Estimate - hero price card + line-item breakdown */
 .iq-price-card {
   position: relative; overflow: hidden;
   background: linear-gradient(135deg, rgba(212,168,83,0.18) 0%, rgba(212,168,83,0.04) 100%);
@@ -577,7 +577,7 @@ p b { font-weight: 400; }
   content: '✓'; position: absolute; left: 0; top: 0; color: var(--gold); font-size: 0.75rem; font-weight: 600;
 }
 
-/* Step 5: Contact — preferred-contact + best-time toggles */
+/* Step 5: Contact - preferred-contact + best-time toggles */
 .iq-pref-group { margin-top: 0.5rem; }
 .iq-pref-label {
   display: block; font-family: 'Bebas Neue', sans-serif;
@@ -609,7 +609,7 @@ p b { font-weight: 400; }
 }
 
 /* ────────────────────────────────────────────────────────────────────
-   Homepage Ask Dr. Scottsdale — inline chat bubbles.
+   Homepage Ask Dr. Scottsdale - inline chat bubbles.
    Used by wireHomepageAskInline() in scripts.js. Mirrors NRPS
    HomepageAskDrMata visual language: user-right-aligned gold-edged
    bubbles, bot-left-aligned royal-purple bubbles, thinking pulse.
@@ -692,7 +692,7 @@ section.ask .chat .body .iq-bubble.iq-thinking {
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0s linear 0.3s;
   display: flex;
-  align-items: flex-start; /* was center — locked scroll when content was taller than viewport */
+  align-items: flex-start; /* was center - locked scroll when content was taller than viewport */
   justify-content: center;
   overflow-y: auto;        /* allow drawer to scroll when Signatures expands */
   -webkit-overflow-scrolling: touch;
@@ -785,7 +785,7 @@ section.ask .chat .body .iq-bubble.iq-thinking {
 }
 
 /* ════════════════════════════════════════════════════════════════════════
-   v2.4 — Mobile fixes, Signatures dropdown, sitewide animations.
+   v2.4 - Mobile fixes, Signatures dropdown, sitewide animations.
    Comprehensive QA/QC pass from Gunn's feedback:
      1. Mobile header: hamburger to far right, hide top CTA on mobile
      2. Mobile footer: center-align + readable
@@ -924,7 +924,7 @@ nav.top .dropdown-menu .dd-divider {
 }
 
 /* ─── ANIMATIONS ───────────────────────────────────────────────────────── */
-/* Fade-up on scroll — applied via Intersection Observer (data-anim attr).
+/* Fade-up on scroll - applied via Intersection Observer (data-anim attr).
    We respect prefers-reduced-motion so users with motion sensitivity see
    the final state immediately. */
 @media (prefers-reduced-motion: no-preference) {
@@ -956,7 +956,7 @@ nav.top .dropdown-menu .dd-divider {
     transform: scaleX(1);
   }
 
-  /* Hero portrait subtle float — feels alive but not jarring */
+  /* Hero portrait subtle float - feels alive but not jarring */
   section.hero .portrait-wrap img {
     animation: drScHeroFloat 8s ease-in-out infinite;
   }
@@ -965,7 +965,7 @@ nav.top .dropdown-menu .dd-divider {
     50% { transform: translateY(-6px); }
   }
 
-  /* Button micro-interactions — lift + glow on hover */
+  /* Button micro-interactions - lift + glow on hover */
   .cta, .fab-book, section.hero .row .cta, a.cta {
     transition: transform 0.3s cubic-bezier(.16,.84,.36,1),
                 box-shadow 0.3s cubic-bezier(.16,.84,.36,1),
@@ -995,7 +995,7 @@ nav.top .dropdown-menu .dd-divider {
 }
 
 /* ════════════════════════════════════════════════════════════════════════
-   MOBILE FIXES — @media (max-width: 900px) overrides
+   MOBILE FIXES - @media (max-width: 900px) overrides
    ════════════════════════════════════════════════════════════════════════ */
 @media (max-width: 900px) {
   /* HEADER: hamburger to far right, hide top CTA (drawer + bottom CTA cover it) */

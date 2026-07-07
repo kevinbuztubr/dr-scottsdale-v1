@@ -1,16 +1,16 @@
 /* Dr. Scottsdale shared client scripts (v1.7).
    Loaded by every page. Handles:
-   1. Ask Dr. Scottsdale — full streaming chat → /api/chat → nr-website ask-dr-mata
-   2. Book Consult widget — same UX/flow as the Natural Results FloatingContactWidget
+   1. Ask Dr. Scottsdale - full streaming chat → /api/chat → nr-website ask-dr-mata
+   2. Book Consult widget - same UX/flow as the Natural Results FloatingContactWidget
       • 4-action menu: Instant Quote, Book a Consultation, Text Us, Call
       • Instant Quote: 6-step flow (gender → area → services → estimate → contact → confirm)
         identical to NRPS, with Dr. Mata's full procedure catalog pulled live from
         https://naturalresultsaz.com/api/widget-services (filtered to provider="dr-mata"
-        — NO medspa services, since this brand site is Dr. Mata's surgical practice).
+        - NO medspa services, since this brand site is Dr. Mata's surgical practice).
       • Phone (Call + Text fallback) matches the NRPS widget: (480) 852-4999.
       • All submissions POST to /api/lead → nr-website /api/widget-relay → nrps-admin
         /api/widget/quote → GHL, stamped with siteSource="drscottsdaleaz.com" server-side.
-   3. 18+ B&A age-gate — modal that gates surgical results imagery
+   3. 18+ B&A age-gate - modal that gates surgical results imagery
    No external dependencies. Vanilla DOM. */
 
 (() => {
@@ -21,34 +21,34 @@
   const PAGE_LOAD_TS = Date.now();
 
   // ────────────────────────────────────────────────────────────────────
-  // Analytics — GTM dataLayer push helper
+  // Analytics - GTM dataLayer push helper
   // ────────────────────────────────────────────────────────────────────
   //
   // GTM-NN23WX4F is installed in <head> of every page. This site's GTM
-  // container is its own — explicitly NOT the Natural Results container.
+  // container is its own - explicitly NOT the Natural Results container.
   // Inside GTM, configure your GA4 / Google Ads / Meta pixels and use these
   // event names as triggers. Naming convention is consistent across the
   // whole site so dashboards can group/funnel cleanly.
   //
   // Events emitted (full coverage of the patient journey):
-  //   page_view_extra        — once on load (in addition to GTM's default page view)
+  //   page_view_extra        - once on load (in addition to GTM's default page view)
   //                            includes page_category derived from URL
-  //   widget_open            — Book Consult pill click → menu opens
-  //   widget_close           — Menu / flow closed without conversion
-  //   instant_quote_start    — User picked Instant Quote from the menu
-  //   iq_gender_selected     — Step 1 complete (value: female|male)
-  //   iq_area_selected       — Step 2 complete (value: area key, e.g. "body")
-  //   iq_service_selected    — Each service add (value: service id, running total)
-  //   iq_estimate_view       — Step 4 estimate rendered (value: estimate_min/max, monthly)
-  //   instant_quote_submit   — Form submission successful → GHL created lead
-  //   book_consult_start     — User picked Book a Consultation from the menu
-  //   book_consult_submit    — Book Consult form successfully submitted
-  //   text_us_start          — User picked Text Us
-  //   text_us_submit         — Text Us form successfully submitted
-  //   phone_call_click       — User tapped a tel: link (Call Us, etc.)
-  //   ask_dr_scottsdale_open — Ask Dr. Scottsdale chat opened
-  //   ask_dr_scottsdale_q    — User submitted a question to the chat
-  //   age_gate_confirmed     — 18+ confirmation on results pages
+  //   widget_open            - Book Consult pill click → menu opens
+  //   widget_close           - Menu / flow closed without conversion
+  //   instant_quote_start    - User picked Instant Quote from the menu
+  //   iq_gender_selected     - Step 1 complete (value: female|male)
+  //   iq_area_selected       - Step 2 complete (value: area key, e.g. "body")
+  //   iq_service_selected    - Each service add (value: service id, running total)
+  //   iq_estimate_view       - Step 4 estimate rendered (value: estimate_min/max, monthly)
+  //   instant_quote_submit   - Form submission successful → GHL created lead
+  //   book_consult_start     - User picked Book a Consultation from the menu
+  //   book_consult_submit    - Book Consult form successfully submitted
+  //   text_us_start          - User picked Text Us
+  //   text_us_submit         - Text Us form successfully submitted
+  //   phone_call_click       - User tapped a tel: link (Call Us, etc.)
+  //   ask_dr_scottsdale_open - Ask Dr. Scottsdale chat opened
+  //   ask_dr_scottsdale_q    - User submitted a question to the chat
+  //   age_gate_confirmed     - 18+ confirmation on results pages
   //
   // All events carry: event (name), event_session (the per-page-load session id),
   // event_property ("drscottsdaleaz.com"), and event_value (when meaningful).
@@ -88,11 +88,11 @@
     }
   }
 
-  // Emit on every load — gives GTM a hook beyond its built-in page_view
+  // Emit on every load - gives GTM a hook beyond its built-in page_view
   // so we can distinguish "Dr. Scottsdale page_view" from default.
   track("page_view_extra", { page_url: window.location.href, page_title: document.title });
 
-  // Global tel: click instrumentation — catches every call CTA across the site
+  // Global tel: click instrumentation - catches every call CTA across the site
   // even ones outside the widget (footer phone, hero CTA, etc.).
   document.addEventListener("click", (e) => {
     const tel = e.target.closest && e.target.closest('a[href^="tel:"]');
@@ -107,7 +107,7 @@
   // Phone & catalog config
   // ────────────────────────────────────────────────────────────────────
 
-  // Same number the NRPS FloatingContactWidget uses — both sites funnel into
+  // Same number the NRPS FloatingContactWidget uses - both sites funnel into
   // the same GHL location and the practice answers calls/texts on this line.
   // (480) 852-4999 is the office switchboard; (480) 852-4999 is the GHL-routed
   // dedicated widget line. Per Gunn: brand-site widget must use the GHL line
@@ -115,7 +115,7 @@
   const PHONE = "+14808524999";
   const PHONE_DISPLAY = "(480) 852-4999";
 
-  // Same-origin catalog endpoint — /api/catalog.js proxies to
+  // Same-origin catalog endpoint - /api/catalog.js proxies to
   // naturalresultsaz.com/api/widget-services server-side and filters to
   // provider==='dr-mata' before responding. Browser never sees a cross-origin
   // request, so no CORS / preflight failure modes.
@@ -125,7 +125,7 @@
   // Catalog helpers (mirrors lib/quote/services.ts on nr-website)
   // ────────────────────────────────────────────────────────────────────
 
-  // Area metadata — same labels/emojis/sublabels as nr-website's AREAS const,
+  // Area metadata - same labels/emojis/sublabels as nr-website's AREAS const,
   // filtered to the dr-mata areas (no injectables/skin/contouring).
   const AREAS = {
     body: { label: "Body", sublabel: "Abdomen, waist, buttocks", emoji: "🫄" },
@@ -143,7 +143,7 @@
     male: ["body", "chest-male", "face", "arms-legs", "male-intimate"],
   };
 
-  let CATALOG = []; // Service[] — populated by loadCatalog()
+  let CATALOG = []; // Service[] - populated by loadCatalog()
   let CATALOG_LOADED = false;
   let CATALOG_LOADING = null; // Promise during in-flight fetch
 
@@ -217,15 +217,15 @@
   }
 
   // ────────────────────────────────────────────────────────────────────
-  // Ask Dr. Scottsdale chat — streaming  (unchanged from v1.5)
+  // Ask Dr. Scottsdale chat - streaming  (unchanged from v1.5)
   // ────────────────────────────────────────────────────────────────────
 
   // ────────────────────────────────────────────────────────────────────
-  // Homepage Ask Dr. Scottsdale — SELF-CONTAINED INLINE CHAT.
+  // Homepage Ask Dr. Scottsdale - SELF-CONTAINED INLINE CHAT.
   //
   // Mirrors nr-website's HomepageAskDrMata.tsx component exactly: the
   // homepage section IS the chat. It does NOT open the floating widget.
-  // The two chats are fully independent — user can chat in either; one
+  // The two chats are fully independent - user can chat in either; one
   // does not prompt the other open.
   //
   // Wire:
@@ -236,10 +236,10 @@
   //     → nrps-admin /api/public/log-chat with siteSource: drscottsdaleaz.com)
   //   - Body has a fixed height so the page below it doesn't shift as
   //     answers stream in (NRPS lesson: scroll inside container, never
-  //     scrollIntoView on a sentinel — that yanks the whole page).
+  //     scrollIntoView on a sentinel - that yanks the whole page).
   // ────────────────────────────────────────────────────────────────────
   // ────────────────────────────────────────────────────────────────────
-  // Mobile hamburger menu — injected into every nav.top on page load.
+  // Mobile hamburger menu - injected into every nav.top on page load.
   //
   // The shared CSS hides nav.top .links at ≤900px (display:none) but
   // there was no fallback navigation, leaving mobile users stranded on
@@ -301,7 +301,7 @@
 
     // Click on the parent link should jump to the in-page anchor on the homepage,
     // but on a procedure page it should go to the homepage's #signature anchor.
-    // We leave the original href alone — hover reveals the dropdown for granular nav.
+    // We leave the original href alone - hover reveals the dropdown for granular nav.
 
     // Mobile touch fallback: tap toggles
     sigLink.addEventListener('click', (e) => {
@@ -457,7 +457,7 @@
       div.appendChild(bubble);
       body.appendChild(div);
       // Scroll the body container, NOT the page. scrollIntoView on a
-      // sentinel yanks the page up — direct scrollTop is scoped.
+      // sentinel yanks the page up - direct scrollTop is scoped.
       requestAnimationFrame(() => { body.scrollTop = body.scrollHeight; });
       return bubble;
     }
@@ -491,8 +491,8 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             procedureSlug: 'homepage',
-            procedureName: 'Dr. Scottsdale® — Natural Results Plastic Surgery',
-            context: 'Topic: drscottsdaleaz.com homepage Ask. Dr. Scottsdale® (Dr. Carlos Mata) is a Harvard-trained, board-certified plastic surgeon in Scottsdale, AZ. Signature trademarked procedures: Scottsdale Skinny® (lipo 360 + fat transfer + high-def etching), Gladiator® (male high-def body contouring), Magic Shot® (non-surgical penile enhancement). Practice: Natural Results Plastic Surgery, AAAASF-accredited surgical suite. 25,000+ procedures. Help the visitor narrow down what they want, point to procedure pages for specifics, refer them to a consultation for candidacy or plan recommendations. Do not quote dollar prices — refer to the Instant Quote Tool or consult. Never refer users outside the practice ("see your doctor" / "consult a physician") — always default to "schedule a consultation with Dr. Scottsdale" since they\'re already on his site.',
+            procedureName: 'Dr. Scottsdale® - Natural Results Plastic Surgery',
+            context: 'Topic: drscottsdaleaz.com homepage Ask. Dr. Scottsdale® (Dr. Carlos Mata) is a Harvard-trained, board-certified plastic surgeon in Scottsdale, AZ. Signature trademarked procedures: Scottsdale Skinny® (lipo 360 + fat transfer + high-def etching), Gladiator® (male high-def body contouring), Magic Shot® (non-surgical penile enhancement). Practice: Natural Results Plastic Surgery, AAAASF-accredited surgical suite. 25,000+ procedures. Help the visitor narrow down what they want, point to procedure pages for specifics, refer them to a consultation for candidacy or plan recommendations. Do not quote dollar prices - refer to the Instant Quote Tool or consult. Never refer users outside the practice ("see your doctor" / "consult a physician") - always default to "schedule a consultation with Dr. Scottsdale" since they\'re already on his site.',
             messages: messages.slice(),
             sessionId,
           }),
@@ -515,7 +515,7 @@
         messages.push({ role: 'assistant', content: acc });
       } catch (e) {
         botBubble.classList.remove('iq-thinking');
-        botBubble.innerHTML = escapeHtml('Sorry — I couldn\'t reach Dr. Scottsdale right now. Please try again, or use the floating Ask widget in the corner.');
+        botBubble.innerHTML = escapeHtml('Sorry - I couldn\'t reach Dr. Scottsdale right now. Please try again, or use the floating Ask widget in the corner.');
       } finally {
         streaming = false;
       }
@@ -561,7 +561,7 @@
       <div class="body chat-body" id="ask-chat-body">
         <div class="msg msg-assistant">
           <div class="bubble">
-            Hi — I can answer questions about Scottsdale Skinny®, Gladiator®, Magic Shot®,
+            Hi - I can answer questions about Scottsdale Skinny®, Gladiator®, Magic Shot®,
             recovery, candidacy, or anything else about the practice. What's on your mind?
           </div>
         </div>
@@ -668,7 +668,7 @@
         }
       } catch (err) {
         assistantBubble.classList.remove('thinking');
-        assistantBubble.textContent = `Sorry — I couldn't reach the assistant. Try calling ${PHONE_DISPLAY} or use Book Consult below.`;
+        assistantBubble.textContent = `Sorry - I couldn't reach the assistant. Try calling ${PHONE_DISPLAY} or use Book Consult below.`;
       } finally {
         streaming = false;
         if (assistantText.trim()) messages.push({ role: 'assistant', content: assistantText });
@@ -677,7 +677,7 @@
   }
 
   // ────────────────────────────────────────────────────────────────────
-  // Book Consult widget — NRPS-parity (Instant Quote uses full Dr. Mata catalog)
+  // Book Consult widget - NRPS-parity (Instant Quote uses full Dr. Mata catalog)
   // ────────────────────────────────────────────────────────────────────
 
   function wireBookWidget() {
@@ -695,7 +695,7 @@
           <div class="lead-head">
             <div class="row"><span class="gold-bar"></span><span class="eyebrow">How can we help?</span></div>
             <h3>Get started with Dr. Scottsdale</h3>
-            <p>Pick the path that fits — every option lands with Dr. Scottsdale's team.</p>
+            <p>Pick the path that fits - every option lands with Dr. Scottsdale's team.</p>
           </div>
           <div class="lead-menu">
             <button class="lead-menu-row primary" data-go="iq-gender">
@@ -747,7 +747,7 @@
           <div class="lead-head">
             <div class="row"><span class="gold-bar"></span><span class="eyebrow">Step 2 of 5 · Area of concern</span></div>
             <h3>What area would you like to focus on?</h3>
-            <p>Pick the area you're most interested in — you'll select specific treatments next.</p>
+            <p>Pick the area you're most interested in - you'll select specific treatments next.</p>
           </div>
           <div class="iq-area-list" id="iq-area-list"></div>
         </div>
@@ -758,7 +758,7 @@
           <div class="lead-head">
             <div class="row"><span class="gold-bar"></span><span class="eyebrow" id="iq-services-eyebrow">Step 3 of 5</span></div>
             <h3>Select services</h3>
-            <p>Choose any that interest you — combining procedures may reduce cost.</p>
+            <p>Choose any that interest you - combining procedures may reduce cost.</p>
           </div>
           <div class="iq-services-scroll" id="iq-services-list"></div>
           <div class="iq-services-footer">
@@ -913,7 +913,7 @@
     const card = modal.querySelector('.lead-card');
     const closeBtn = modal.querySelector('.lead-close');
 
-    // Quote-flow state — mirrors the React useState in InstantQuoteFlow.tsx
+    // Quote-flow state - mirrors the React useState in InstantQuoteFlow.tsx
     const state = {
       step: 'menu',
       gender: null,
@@ -939,7 +939,7 @@
       if (askPanel) askPanel.classList.remove('show');
       // Kick off catalog load if not already loaded (so it's ready when they
       // reach the services step).
-      loadCatalog().catch(() => { /* swallow — services step will show error */ });
+      loadCatalog().catch(() => { /* swallow - services step will show error */ });
       track('widget_open');
     }
     function closeModal() {
@@ -1118,13 +1118,13 @@
         const label = selectedVariant.label && selectedVariant.label !== 'Standard'
           ? `<span class="iq-svc-variant-label">${escapeHTML(selectedVariant.label)}</span> · `
           : '';
-        priceHTML = `${label}<span class="iq-svc-price-num">${fmtMoney(selectedVariant.priceMin)}${selectedVariant.priceMax > selectedVariant.priceMin ? `–${fmtMoney(selectedVariant.priceMax)}` : ''}</span>`;
+        priceHTML = `${label}<span class="iq-svc-price-num">${fmtMoney(selectedVariant.priceMin)}${selectedVariant.priceMax > selectedVariant.priceMin ? `-${fmtMoney(selectedVariant.priceMax)}` : ''}</span>`;
       } else if (hasVariants) {
         priceHTML = `from ${fmtMoney(fromPrice)} · ${pricedVariants.length} options`;
       } else if (singleVariant) {
-        priceHTML = `${fmtMoney(singleVariant.priceMin)}${singleVariant.priceMax > singleVariant.priceMin ? `–${fmtMoney(singleVariant.priceMax)}` : ''}`;
+        priceHTML = `${fmtMoney(singleVariant.priceMin)}${singleVariant.priceMax > singleVariant.priceMin ? `-${fmtMoney(singleVariant.priceMax)}` : ''}`;
       } else {
-        priceHTML = `${fmtMoney(svc.priceMin)}${svc.priceMax > svc.priceMin ? `–${fmtMoney(svc.priceMax)}` : ''}`;
+        priceHTML = `${fmtMoney(svc.priceMin)}${svc.priceMax > svc.priceMin ? `-${fmtMoney(svc.priceMax)}` : ''}`;
       }
 
       const isExpanded = state.expandedId === svc.id && hasVariants && !isSelected;
@@ -1137,7 +1137,7 @@
               <span class="iq-svc-variant-dot"></span>
               <span class="iq-svc-variant-info">
                 <span class="iq-svc-variant-lbl">${escapeHTML(v.label)}</span>
-                <span class="iq-svc-variant-px">${fmtMoney(v.priceMin)}${v.priceMax > v.priceMin ? `–${fmtMoney(v.priceMax)}` : ''}</span>
+                <span class="iq-svc-variant-px">${fmtMoney(v.priceMin)}${v.priceMax > v.priceMin ? `-${fmtMoney(v.priceMax)}` : ''}</span>
               </span>
             </button>
           `).join('')}
@@ -1206,7 +1206,7 @@
       const contBtn = modal.querySelector('#iq-continue');
       countEl.textContent = `${state.selections.length} selected`;
       if (state.selections.length > 0) {
-        rangeEl.textContent = `${fmtMoney(range.min)}${range.max > range.min ? `–${fmtMoney(range.max)}` : ''}`;
+        rangeEl.textContent = `${fmtMoney(range.min)}${range.max > range.min ? `-${fmtMoney(range.max)}` : ''}`;
         contBtn.removeAttribute('disabled');
       } else {
         rangeEl.textContent = '';
@@ -1214,7 +1214,7 @@
       }
     }
 
-    // The "See My Estimate" button uses data-go="iq-estimate" — captured in the
+    // The "See My Estimate" button uses data-go="iq-estimate" - captured in the
     // main navigation handler above.
     modal.querySelector('#iq-continue').addEventListener('click', (e) => {
       e.stopPropagation();
@@ -1232,8 +1232,8 @@
       const priceCard = `
         <div class="iq-price-inner">
           <span class="iq-price-eyebrow">Estimated investment</span>
-          <div class="iq-price-big">${fmtMoney(range.min)}${range.max > range.min ? `<span class="iq-price-max">–${fmtMoney(range.max)}</span>` : ''}</div>
-          ${mMin > 0 ? `<div class="iq-price-monthly">or as low as <strong>${fmtMoney(mMin)}${mMax > mMin ? `–${fmtMoney(mMax)}` : ''}</strong>/month*</div>` : ''}
+          <div class="iq-price-big">${fmtMoney(range.min)}${range.max > range.min ? `<span class="iq-price-max">-${fmtMoney(range.max)}</span>` : ''}</div>
+          ${mMin > 0 ? `<div class="iq-price-monthly">or as low as <strong>${fmtMoney(mMin)}${mMax > mMin ? `-${fmtMoney(mMax)}` : ''}</strong>/month*</div>` : ''}
           <div class="iq-price-fineprint">*Financing subject to credit approval. 60mo at 12% APR est.</div>
         </div>
       `;
@@ -1254,7 +1254,7 @@
               <span>${escapeHTML(svc.name)}</span>
               ${vLabel ? `<span class="iq-bd-variant">${escapeHTML(vLabel)}</span>` : ''}
             </div>
-            <span class="iq-bd-price">${fmtMoney(pMin)}${pMax > pMin ? `–${fmtMoney(pMax)}` : ''}</span>
+            <span class="iq-bd-price">${fmtMoney(pMin)}${pMax > pMin ? `-${fmtMoney(pMax)}` : ''}</span>
           </div>
         `;
       }).filter(Boolean).join('');
@@ -1328,7 +1328,7 @@
           const isText = action === 'Text Us';
           modal.querySelector('#thanks-title').textContent = isText ? 'Message sent.' : `Thank you, ${escapeHTML(payload.contact.firstName)}.`;
           modal.querySelector('#thanks-body').textContent = isText
-            ? `Dr. Scottsdale's team will text you back from ${PHONE_DISPLAY} — keep an eye on your phone.`
+            ? `Dr. Scottsdale's team will text you back from ${PHONE_DISPLAY} - keep an eye on your phone.`
             : `Your request has been received. A member of our team will reach out within 24 hours.`;
           // Conversion events fired ONLY after GHL upstream returned ok.
           // These map to GA4 conversion / Google Ads conversion / Meta lead event in GTM.
@@ -1416,7 +1416,7 @@
   }
 
   // ────────────────────────────────────────────────────────────────────
-  // Animations — IntersectionObserver fade-up + hero entrance + auto-decorate
+  // Animations - IntersectionObserver fade-up + hero entrance + auto-decorate
   //
   // Strategy: rather than hand-annotate every element across 14 pages, we
   // auto-decorate sensible defaults (section h2, section.row, .sig-card,
@@ -1452,7 +1452,7 @@
       });
     });
 
-    // Hero entrance — staggered, runs as soon as the hero is in view.
+    // Hero entrance - staggered, runs as soon as the hero is in view.
     const hero = document.querySelector('section.hero');
     if (hero) {
       const heroSteps = [
@@ -1467,7 +1467,7 @@
       heroSteps.forEach((el, i) => {
         el.setAttribute('data-anim', 'fade-up');
         el.setAttribute('data-delay', String(Math.min(i * 100, 500)));
-        // Hero is above-the-fold — force in-view on next frame so the
+        // Hero is above-the-fold - force in-view on next frame so the
         // entrance plays on initial paint instead of waiting for scroll.
         requestAnimationFrame(() => {
           requestAnimationFrame(() => el.classList.add('in-view'));

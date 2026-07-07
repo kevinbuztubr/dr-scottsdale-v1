@@ -1,5 +1,5 @@
 /**
- * /api/chat — Dr. Scottsdale® → nr-website /api/ask-dr-mata streaming proxy.
+ * /api/chat - Dr. Scottsdale® → nr-website /api/ask-dr-mata streaming proxy.
  *
  * Why a proxy instead of having the static HTML call nr-website directly:
  *   1. Avoid the cross-origin streaming headache. The ask-dr-mata endpoint
@@ -12,7 +12,7 @@
  *
  * Streams the upstream response 1:1 to the client (same Content-Type,
  * same chunked transfer). The widget on the page reads chunks as they
- * arrive — identical UX to nr-website's chat.
+ * arrive - identical UX to nr-website's chat.
  */
 
 const NR_WEBSITE_URL = "https://naturalresultsaz.com";
@@ -85,7 +85,7 @@ module.exports = async function handler(req, res) {
         Referer: req.headers.referer || "https://drscottsdaleaz.com/",
         // Origin must be forwarded so nr-website's /api/ask-dr-mata can
         // attach it to its log-chat POST. The admin's /api/public/log-chat
-        // origin-gates on this header — without it, chat-logging silently
+        // origin-gates on this header - without it, chat-logging silently
         // 403s and Dr. Scottsdale conversations never reach the admin
         // /chat-logs Insights view. Same-origin NRPS chats get this for
         // free from the browser; this proxy hop doesn't.

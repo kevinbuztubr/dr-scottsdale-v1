@@ -1,18 +1,19 @@
 {
   "name": "dr-scottsdale-v1",
   "version": "1.3.0",
-  "description": "Dr. Scottsdale® brand site — static HTML + Vercel Node functions that proxy to nrps-admin (widget) and nr-website (Ask Dr. Scottsdale chat). Server functions hold all secrets so the static HTML never embeds them.",
+  "description": "Dr. Scottsdale® brand site - static HTML + Vercel Node functions that proxy to nrps-admin (widget) and nr-website (Ask Dr. Scottsdale chat). Server functions hold all secrets so the static HTML never embeds them.",
   "private": true,
   "engines": {
     "node": "20.x"
   },
   "scripts": {
-    "dev": "echo 'Static HTML — no dev server needed. Use vercel dev for /api routes.'",
+    "dev": "echo 'Static HTML - no dev server needed. Use vercel dev for /api routes.'",
     "check:schema": "node scripts/schema-canary.mjs",
     "check:benjamin": "node scripts/dr-benjamin-canary.mjs",
     "check:claims": "node scripts/clinical-claims-canary.mjs",
     "check:services": "node scripts/unverified-service-canary.mjs",
-    "check:all": "npm run check:schema && npm run check:benjamin && npm run check:claims && npm run check:services",
+    "check:dashes": "node scripts/em-dash-canary.mjs",
+    "check:all": "npm run check:schema && npm run check:benjamin && npm run check:claims && npm run check:services && npm run check:dashes",
     "build": "npm run check:all"
   }
 }

@@ -1,4 +1,4 @@
-# Dr. Scottsdale® — v1
+# Dr. Scottsdale® - v1
 
 Personal-brand site for **Dr. Carlos Mata** (Dr. Scottsdale®), the headlining
 surgeon at Natural Results Plastic Surgery. Designed to scale the personal
@@ -24,31 +24,31 @@ once the design is locked.
 
 ## Sections
 
-1. **Hero** — Dr. Mata portrait + brand wordmark + dual CTA + stats strip
-2. **Recognized Excellence** — Newsweek per-procedure callouts (Lipo since 2022,
+1. **Hero** - Dr. Mata portrait + brand wordmark + dual CTA + stats strip
+2. **Recognized Excellence** - Newsweek per-procedure callouts (Lipo since 2022,
    Facelift + Breast Aug since 2023), Castle Connolly Top 1% since 2018,
    RealSelf + ABPS/FACS + ASPS/ASAPS/WAGS membership strip
-3. **Signature Procedures** — Scottsdale Skinny®, Gladiator®, Magic Shot®
+3. **Signature Procedures** - Scottsdale Skinny®, Gladiator®, Magic Shot®
    with real photo backgrounds + hover lift
-4. **About Dr. Scottsdale** — Portrait + brand voice + credential chips
-5. **Real Results** — B&A pairs (Mommy Makeover + Breast Aug) with gallery CTA
-6. **Social Proof** — 1M+ follower grid (IG, TikTok, Snapchat, YouTube)
-7. **As Featured In** — Men's Health, LA Weekly, USA Today, Yahoo, Voyage Phoenix
-8. **Ask Dr. Scottsdale** — AI chat (UI shipped, server-side wiring in v2)
-9. **Final CTA** — Booking consultation block
-10. **Footer** — Practice address, social, legal
+4. **About Dr. Scottsdale** - Portrait + brand voice + credential chips
+5. **Real Results** - B&A pairs (Mommy Makeover + Breast Aug) with gallery CTA
+6. **Social Proof** - 1M+ follower grid (IG, TikTok, Snapchat, YouTube)
+7. **As Featured In** - Men's Health, LA Weekly, USA Today, Yahoo, Voyage Phoenix
+8. **Ask Dr. Scottsdale** - AI chat (UI shipped, server-side wiring in v2)
+9. **Final CTA** - Booking consultation block
+10. **Footer** - Practice address, social, legal
 
 ## Assets
 
 All imagery in `/images/` was pulled from the live `naturalresultsaz.com`
-production deployment — same surgeon, same procedures, asset continuity
+production deployment - same surgeon, same procedures, asset continuity
 already verified.
 
-- `dr-mata.jpg` — Studio portrait (used in hero + about)
+- `dr-mata.jpg` - Studio portrait (used in hero + about)
 - `sig-scottsdale-skinny.png`, `sig-rapid-recovery.png`, `sig-magic-shot.png`
-- `ba-mommy-before.jpg` / `ba-mommy-after.jpg` — Mommy Makeover pair
-- `ba-breast-before.jpg` / `ba-breast-after.jpg` — Breast Aug pair
-- `press-*.png` — Men's Health, LA Weekly, USA Today, Yahoo, Voyage, Top Docs
+- `ba-mommy-before.jpg` / `ba-mommy-after.jpg` - Mommy Makeover pair
+- `ba-breast-before.jpg` / `ba-breast-after.jpg` - Breast Aug pair
+- `press-*.png` - Men's Health, LA Weekly, USA Today, Yahoo, Voyage, Top Docs
 - `badge-realself.png`, `badge-abps.png`, `badge-castleconnolly.png`
 
 ## Next (v2)
@@ -61,4 +61,4 @@ already verified.
 - Procedure detail pages for each signature
 - Refactor nr-website + dr-scottsdale into a monorepo with a shared
   `packages/ui/` for the chat widget, booking widget, and procedure
-  catalogue retrieval — so future doctor #3 ships in days, not weeks
+  catalogue retrieval - so future doctor #3 ships in days, not weeks
