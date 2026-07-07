@@ -14,7 +14,8 @@
     "check:services": "node scripts/unverified-service-canary.mjs",
     "check:dashes": "node scripts/em-dash-canary.mjs",
     "check:glance": "node scripts/at-a-glance-canary.mjs",
-    "check:all": "npm run check:schema && npm run check:benjamin && npm run check:claims && npm run check:services && npm run check:dashes && npm run check:glance",
+    "check:implants": "node scripts/implant-type-canary.mjs",
+    "check:all": "npm run check:schema && npm run check:benjamin && npm run check:claims && npm run check:services && npm run check:dashes && npm run check:glance && npm run check:implants",
     "build": "npm run check:all"
   }
 }
