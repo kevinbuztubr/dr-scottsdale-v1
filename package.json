@@ -9,6 +9,10 @@
   "scripts": {
     "dev": "echo 'Static HTML — no dev server needed. Use vercel dev for /api routes.'",
     "check:schema": "node scripts/schema-canary.mjs",
-    "build": "node scripts/schema-canary.mjs"
+    "check:benjamin": "node scripts/dr-benjamin-canary.mjs",
+    "check:claims": "node scripts/clinical-claims-canary.mjs",
+    "check:services": "node scripts/unverified-service-canary.mjs",
+    "check:all": "npm run check:schema && npm run check:benjamin && npm run check:claims && npm run check:services",
+    "build": "npm run check:all"
   }
 }
