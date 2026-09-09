@@ -37,3 +37,7 @@ User-agent: mistral-ai
 Allow: /
 
 Sitemap: https://drscottsdaleaz.com/sitemap.xml
+
+# Structured summary for AI answer engines (same convention as
+# naturalresultsaz.com/llms.txt).
+# LLM-Content: https://drscottsdaleaz.com/llms.txt
