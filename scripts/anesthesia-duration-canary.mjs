@@ -120,10 +120,20 @@ const DURATION = [
  *      line 23 is 3,479 characters. A line-level exemption meant a single
  *      "6 weeks" anywhere in that blob exempted the ENTIRE page's structured
  *      data, which is precisely where the real violations live.
- *   2. The nr-website original guards its carve-out with
- *      /\b(anesthes|anesthet|...)\b/ - a word boundary after a PREFIX, so
- *      `\banesthes\b` can never match "anesthesia". The guard silently never
- *      fires. Do not copy that pattern back.
+ *   2. My first attempt guarded the carve-out with
+ *      /\b(anesthes|anesthet|sedation|hour|...)\b/ - a word boundary after a
+ *      PREFIX, so `\banesthes\b` can never match "anesthesia" and the guard
+ *      silently never fired. Combined with (1), that made the canary report
+ *      CLEAN on a page whose schema said "General anesthesia, 3-4 hours".
+ *
+ * CORRECTION (same day, recorded because the first version of this comment and
+ * the commit message that shipped it both got this wrong): that broken guard
+ * was MINE, not inherited. nr-website's canary does NOT contain it and does not
+ * have this bug - its carve-out is stricter, requiring a cadence interval AND a
+ * follow-up context (/follow.?up|cadence|post.?op|check.?in/) on the same line.
+ * There is nothing to port back to nr-website. Any future reader who went to
+ * "fix" that repo on the strength of the earlier note would have been chasing a
+ * bug that does not exist there.
  *
  * Verified by seeding "General anesthesia, 3-4 hours." into the tummy-tuck
  * JSON-LD: the line-level version reported CLEAN, this version fails.
