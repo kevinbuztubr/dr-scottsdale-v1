@@ -199,6 +199,24 @@
     }
     return { min, max };
   }
+  // Mirrors nr-website lib/quote/submit.ts. nrps-admin takes the opportunity
+  // value from amountQuoted (low end) and nothing else, so a quote sent
+  // without it lands in GHL at $0: every Instant Quote from this site did,
+  // from launch until 2026-09-30. servicesList is what staff read in
+  // "Procedures Interested In" instead of raw "slug::v1" tokens.
+  function quoteSummary(selections) {
+    const r = calcRange(selections);
+    const servicesList = selections.map((token) => {
+      const { serviceId, variantId } = parseSelection(token);
+      const svc = findService(serviceId);
+      if (!svc) return token;
+      const v = variantId && svc.variants ? svc.variants.find((x) => x.id === variantId) : null;
+      return v && v.label !== "Standard" && v.label !== svc.name ? `${svc.name}, ${v.label}` : svc.name;
+    }).join(", ");
+    if (!(r.min > 0)) return { servicesList };
+    const amountQuoted = r.max > r.min ? `${fmtMoney(r.min)} to ${fmtMoney(r.max)}` : fmtMoney(r.min);
+    return { amountQuoted, servicesList };
+  }
   function monthlyPayment(amount, apr = 0.12, months = 60) {
     if (amount <= 0) return 0;
     const r = apr / 12;
@@ -1118,13 +1136,13 @@
         const label = selectedVariant.label && selectedVariant.label !== 'Standard'
           ? `<span class="iq-svc-variant-label">${escapeHTML(selectedVariant.label)}</span> · `
           : '';
-        priceHTML = `${label}<span class="iq-svc-price-num">${fmtMoney(selectedVariant.priceMin)}${selectedVariant.priceMax > selectedVariant.priceMin ? `-${fmtMoney(selectedVariant.priceMax)}` : ''}</span>`;
+        priceHTML = `${label}<span class="iq-svc-price-num">${fmtMoney(selectedVariant.priceMin)}${selectedVariant.priceMax > selectedVariant.priceMin ? ` to ${fmtMoney(selectedVariant.priceMax)}` : ''}</span>`;
       } else if (hasVariants) {
         priceHTML = `from ${fmtMoney(fromPrice)} · ${pricedVariants.length} options`;
       } else if (singleVariant) {
-        priceHTML = `${fmtMoney(singleVariant.priceMin)}${singleVariant.priceMax > singleVariant.priceMin ? `-${fmtMoney(singleVariant.priceMax)}` : ''}`;
+        priceHTML = `${fmtMoney(singleVariant.priceMin)}${singleVariant.priceMax > singleVariant.priceMin ? ` to ${fmtMoney(singleVariant.priceMax)}` : ''}`;
       } else {
-        priceHTML = `${fmtMoney(svc.priceMin)}${svc.priceMax > svc.priceMin ? `-${fmtMoney(svc.priceMax)}` : ''}`;
+        priceHTML = `${fmtMoney(svc.priceMin)}${svc.priceMax > svc.priceMin ? ` to ${fmtMoney(svc.priceMax)}` : ''}`;
       }
 
       const isExpanded = state.expandedId === svc.id && hasVariants && !isSelected;
@@ -1137,7 +1155,7 @@
               <span class="iq-svc-variant-dot"></span>
               <span class="iq-svc-variant-info">
                 <span class="iq-svc-variant-lbl">${escapeHTML(v.label)}</span>
-                <span class="iq-svc-variant-px">${fmtMoney(v.priceMin)}${v.priceMax > v.priceMin ? `-${fmtMoney(v.priceMax)}` : ''}</span>
+                <span class="iq-svc-variant-px">${fmtMoney(v.priceMin)}${v.priceMax > v.priceMin ? ` to ${fmtMoney(v.priceMax)}` : ''}</span>
               </span>
             </button>
           `).join('')}
@@ -1206,7 +1224,7 @@
       const contBtn = modal.querySelector('#iq-continue');
       countEl.textContent = `${state.selections.length} selected`;
       if (state.selections.length > 0) {
-        rangeEl.textContent = `${fmtMoney(range.min)}${range.max > range.min ? `-${fmtMoney(range.max)}` : ''}`;
+        rangeEl.textContent = `${fmtMoney(range.min)}${range.max > range.min ? ` to ${fmtMoney(range.max)}` : ''}`;
         contBtn.removeAttribute('disabled');
       } else {
         rangeEl.textContent = '';
@@ -1232,8 +1250,8 @@
       const priceCard = `
         <div class="iq-price-inner">
           <span class="iq-price-eyebrow">Estimated investment</span>
-          <div class="iq-price-big">${fmtMoney(range.min)}${range.max > range.min ? `<span class="iq-price-max">-${fmtMoney(range.max)}</span>` : ''}</div>
-          ${mMin > 0 ? `<div class="iq-price-monthly">or as low as <strong>${fmtMoney(mMin)}${mMax > mMin ? `-${fmtMoney(mMax)}` : ''}</strong>/month*</div>` : ''}
+          <div class="iq-price-big">${fmtMoney(range.min)}${range.max > range.min ? `<span class="iq-price-max"> to ${fmtMoney(range.max)}</span>` : ''}</div>
+          ${mMin > 0 ? `<div class="iq-price-monthly">or as low as <strong>${fmtMoney(mMin)}${mMax > mMin ? ` to ${fmtMoney(mMax)}` : ''}</strong>/month*</div>` : ''}
           <div class="iq-price-fineprint">*Financing subject to credit approval. 60mo at 12% APR est.</div>
         </div>
       `;
@@ -1254,7 +1272,7 @@
               <span>${escapeHTML(svc.name)}</span>
               ${vLabel ? `<span class="iq-bd-variant">${escapeHTML(vLabel)}</span>` : ''}
             </div>
-            <span class="iq-bd-price">${fmtMoney(pMin)}${pMax > pMin ? `-${fmtMoney(pMax)}` : ''}</span>
+            <span class="iq-bd-price">${fmtMoney(pMin)}${pMax > pMin ? ` to ${fmtMoney(pMax)}` : ''}</span>
           </div>
         `;
       }).filter(Boolean).join('');
@@ -1300,6 +1318,7 @@
         bestTime: extras.bestTime,
         gender: extras.gender,
         areaOfConcern: extras.areaOfConcern,
+        ...(action === 'Instant Quote' && extras.selections ? quoteSummary(extras.selections) : {}),
         company_website: fd.get('company_website') || '',
         _tStart: PAGE_LOAD_TS,
       };
