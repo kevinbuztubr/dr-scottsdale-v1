@@ -30,17 +30,6 @@ const SITE_SOURCE = "drscottsdaleaz.com";
 const MAX_BODY_BYTES = 8 * 1024;
 const MIN_TIME_ON_PAGE_MS = 2000;
 
-function maskEmail(e) {
-  if (!e || !e.includes("@")) return "[no-email]";
-  const [local, domain] = e.split("@");
-  return `${(local[0] || "")}***@${(domain[0] || "")}***`;
-}
-function maskPhone(p) {
-  if (!p) return "[no-phone]";
-  const digits = String(p).replace(/\D/g, "");
-  return digits.length < 4 ? "***" : `***-***-${digits.slice(-4)}`;
-}
-
 module.exports = async function handler(req, res) {
   if (req.method === "OPTIONS") { res.status(204).end(); return; }
   if (req.method !== "POST") { res.status(405).json({ error: "Method not allowed" }); return; }
@@ -124,10 +113,9 @@ module.exports = async function handler(req, res) {
     upstreamBody = { error: "Invalid relay response" };
   }
 
-  const c = (payload && payload.contact) || {};
-  console.log(
-    `[lead] relay-status=${upstream.status} email=${maskEmail(c.email)} phone=${maskPhone(c.phone)} source=${SITE_SOURCE}`,
-  );
+  // Status only (HIPAA audit 2026-09-30): even masked initials + last-4
+  // digits are partial identifiers, and Vercel logs are not under a BAA.
+  console.log(`[lead] relay-status=${upstream.status} action=${payload && payload.action} source=${SITE_SOURCE}`);
 
   res.status(upstream.status).json(upstreamBody);
 };
