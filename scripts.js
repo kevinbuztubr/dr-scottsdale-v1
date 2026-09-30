@@ -70,9 +70,24 @@
   }
   const PAGE_CATEGORY = pageCategory();
 
+  // Parameters allowed onto the dataLayer (HIPAA audit 2026-09-30). Events
+  // used to carry gender, area of concern, the price estimate, best time to
+  // call and the full page URL/title, all readable by every tag GTM loads
+  // (none under a BAA) and one GTM edit away from an ad platform. Anything not
+  // listed here is dropped, so a new call site cannot reintroduce it. Never
+  // add gender, area, procedure, price, name or contact fields.
+  const SAFE_PARAMS = new Set([
+    'selection_count', 'preferred_contact', 'last_step', 'source',
+    'question_chars', 'question_count', 'from_widget',
+  ]);
+
   function track(event, props) {
     try {
       window.dataLayer = window.dataLayer || [];
+      const safe = {};
+      for (const [k, v] of Object.entries(props || {})) {
+        if (SAFE_PARAMS.has(k) && (typeof v !== 'string' || v.length <= 32)) safe[k] = v;
+      }
       const payload = Object.assign(
         {
           event,
@@ -80,7 +95,7 @@
           event_property: SITE,
           page_category: PAGE_CATEGORY,
         },
-        props || {},
+        safe,
       );
       window.dataLayer.push(payload);
     } catch (_) {
@@ -90,7 +105,7 @@
 
   // Emit on every load - gives GTM a hook beyond its built-in page_view
   // so we can distinguish "Dr. Scottsdale page_view" from default.
-  track("page_view_extra", { page_url: window.location.href, page_title: document.title });
+  track("page_view_extra");
 
   // Global tel: click instrumentation - catches every call CTA across the site
   // even ones outside the widget (footer phone, hero CTA, etc.).
