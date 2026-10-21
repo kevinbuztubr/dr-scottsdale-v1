@@ -4,7 +4,7 @@
   "description": "Dr. Scottsdale\u00ae brand site - static HTML + Vercel Node functions that proxy to nrps-admin (widget) and nr-website (Ask Dr. Scottsdale chat). Server functions hold all secrets so the static HTML never embeds them.",
   "private": true,
   "engines": {
-    "node": "20.x"
+    "node": "24.x"
   },
   "scripts": {
     "dev": "echo 'Static HTML - no dev server needed. Use vercel dev for /api routes.'",
